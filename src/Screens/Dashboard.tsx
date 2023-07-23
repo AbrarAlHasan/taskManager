@@ -1,4 +1,5 @@
 import {
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -14,9 +15,15 @@ import Card from '../Components/Card';
 type NavigationProps = NativeStackNavigationProp<MainStackParamList>;
 const Dashboard = () => {
   const navigation = useNavigation<NavigationProps>();
+  const projects = [2, 43, 4, 23, 4, 23, 4, 4, 3];
+
   return (
-    <SafeAreaView>
-      <Card />
+    <SafeAreaView className="px-3 bg-gray-100 flex-1">
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {projects?.map(() => (
+          <Card />
+        ))}
+      </ScrollView>
     </SafeAreaView>
   );
 };

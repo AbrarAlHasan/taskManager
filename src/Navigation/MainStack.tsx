@@ -6,17 +6,16 @@ import ProjectDetails from '../Screens/ProjectDetails';
 import TaskDetails from '../Screens/TaskDetails';
 import AddTask from '../Screens/AddTask';
 import {MainStackParamList} from './types';
+import BottomTabBar from './BottomTabNavigator';
 
 const mainStack = () => {
   const Stack = createNativeStackNavigator<MainStackParamList>();
   return (
     <Stack.Navigator
-      initialRouteName="Dashboard"
+      initialRouteName="BottomBar"
       screenOptions={{headerShown: false}}>
-      <Stack.Screen component={Dashboard} name="Dashboard" />
-      <Stack.Screen component={ProjectDetails} name="ProjectDetails" />
+      <Stack.Screen component={BottomTabBar} name="BottomBar" />
       <Stack.Screen component={TaskDetails} name="TaskDetails" />
-      <Stack.Screen component={AddTask} name="AddTask" />
     </Stack.Navigator>
   );
 };
