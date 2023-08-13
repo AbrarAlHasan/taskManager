@@ -3,13 +3,15 @@ import React from 'react';
 import Svg, {Circle, Text, G} from 'react-native-svg';
 
 const CircularProgress = ({...props}) => {
-  const {size} = props;
+  const {size, labelName, current, total, labelNumber} = props;
   const r = 35 * size;
   const x = 50 * size;
   const y = 50 * size;
   const length = 2 * Math.PI * r;
   const strokeWidth = r - r * 0.55;
   const width = r * 2.8;
+  const percentage = current == 0 && total == 0 ? 0 : (current / total) * 100;
+  const strokeDashoffset = length - (length * percentage) / 100;
 
   return (
     <Svg width={width} height={width}>
@@ -29,7 +31,7 @@ const CircularProgress = ({...props}) => {
         strokeWidth={strokeWidth - strokeWidth * 0.3}
         stroke={'#18B797'}
         strokeDasharray={length}
-        strokeDashoffset={length * 0.3}
+        strokeDashoffset={strokeDashoffset}
         strokeLinecap="round"
       />
       <G transform={`translate(${x},${x})`}>
@@ -38,7 +40,7 @@ const CircularProgress = ({...props}) => {
           fontSize={r * 0.4} // Set the font size as a proportion of the radius
           fontWeight="bold"
           fill="#000">
-          13/20
+          {labelNumber}
         </Text>
       </G>
       <G transform={`translate(${x},${x * 1.3})`}>
@@ -47,7 +49,7 @@ const CircularProgress = ({...props}) => {
           fontSize={r * 0.3} // Set the font size as a proportion of the radius
           fontWeight="light"
           fill="#000">
-          Tasks
+          {labelName}
         </Text>
       </G>
     </Svg>

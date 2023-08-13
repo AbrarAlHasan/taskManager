@@ -16,6 +16,8 @@ const mainStack = () => {
       screenOptions={{headerShown: false}}>
       <Stack.Screen component={BottomTabBar} name="BottomBar" />
       <Stack.Screen component={TaskDetails} name="TaskDetails" />
+      <Stack.Screen component={ProjectDetails} name="ProjectDetails" />
+      <Stack.Screen component={AddTask} name="AddTaskN" />
     </Stack.Navigator>
   );
 };
