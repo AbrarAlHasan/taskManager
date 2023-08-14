@@ -16,19 +16,20 @@ type TaskDetailsScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 type TaskDetailsProps = {
-  navigation: TaskDetailsScreenNavigationProp;
-  route: {params: TTaskDetailsParams};
+  navigation?: TaskDetailsScreenNavigationProp;
+  route?: {params: TTaskDetailsParams};
 };
 
 const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
   const [taskDetails, setTaskDetails] = useState<ITaskDetails>();
   useEffect(() => {
-    (async () => {
-      const response = await getTaskDetails(route.params.taskId);
-      if (response[0] === 200) {
-        setTaskDetails(response[1]);
-      }
-    })();
+    route &&
+      (async () => {
+        const response = await getTaskDetails(route.params.taskId);
+        if (response[0] === 200) {
+          setTaskDetails(response[1]);
+        }
+      })();
   }, []);
   const progressPercent =
     taskDetails?.progress && taskDetails?.progress > 0
@@ -39,7 +40,7 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
     taskDetails && (
       <SafeAreaView className="px-3 bg-gray-100 flex-1">
         <View className="flex-row items-center justify-center mb-4">
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => navigation && navigation.goBack()}>
             <GoBackIcon />
           </TouchableOpacity>
           <Text className="flex-1 text-center font-bold text-lg">

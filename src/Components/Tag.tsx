@@ -6,10 +6,12 @@ const Tag = ({
   content,
   disabled,
   color,
+  classStyle = 'text-[10px]',
 }: {
   content: 'low' | 'medium' | 'high' | 'random' | string;
   disabled?: Boolean;
   color?: string | undefined;
+  classStyle?: any;
 }) => {
   return (
     <View
@@ -24,7 +26,7 @@ const Tag = ({
       <Text
         className={`uppercase text-${
           disabled ? '[#646464]' : 'white'
-        } font-bold text-[10px]`}>
+        } font-bold text-[10px] ${classStyle}`}>
         {content}
       </Text>
     </View>

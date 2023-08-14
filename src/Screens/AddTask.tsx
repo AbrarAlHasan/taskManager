@@ -21,7 +21,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainStackParamList} from '../Navigation/types';
 import Tag from '../Components/Tag';
 import SearchModal from '../Components/SearchModal';
-import DateTimePicker from 'react-native-modal-datetime-picker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {formatDateTimeTimezone} from '../Utils/FormatDateTime';
 import {addTasks, getMembers, getProjects} from '../axios/Tasks/tasks';
 import {AuthContext} from '../Context/AuthContext/AuthContext';
@@ -366,7 +366,7 @@ const AddTask = () => {
               </View>
             </View>
           </ScrollView>
-          <DateTimePicker
+          <DateTimePickerModal
             minimumDate={dateDetails?.minimumDate}
             date={dateDetails?.date ? dateDetails?.date : new Date()}
             isVisible={dateDetails?.open}

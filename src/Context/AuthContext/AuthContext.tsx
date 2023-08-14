@@ -3,7 +3,7 @@ import {AuthContextType, AuthProviderType} from './AuthContextInterface';
 import {
   checkSession,
   loginUser,
-} from '../../axios/Authentication/Authentication-new';
+} from '../../axios/Authentication/Authentication';
 import {IUserDetails} from '../../Screens/@Types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ToastMessage} from '../../Utils/ToastNotification';

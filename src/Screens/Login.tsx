@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,18 +8,33 @@ import {
 } from 'react-native';
 import {ToastMessage} from '../Utils/ToastNotification';
 import {useNavigation} from '@react-navigation/native';
-import {loginUser} from '../axios/Authentication/Authentication-new';
+import {loginUser} from '../axios/Authentication/Authentication';
 import jwtDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../Context/AuthContext/AuthContext';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {AuthStackParamList} from '../Navigation/types';
+type NavigationProps = NativeStackNavigationProp<AuthStackParamList>;
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProps>();
   const {setIsAuthenticated, setUserDetails} = useContext(AuthContext);
+
+  useEffect(() => {
+    const getLoginCredentials = async () => {
+      const jsonValue = await AsyncStorage.getItem('loginCredential');
+      if (jsonValue) {
+        const parsedData = await JSON.parse(jsonValue);
+        setEmail(parsedData?.email);
+        setPassword(parsedData?.password);
+      }
+    };
+    getLoginCredentials();
+  }, []);
 
   const validate = () => {
     if (!email) {
@@ -38,7 +53,12 @@ const Login = () => {
     try {
       if (validate()) {
         const response: any = await loginUser({email, password});
+        console.log(response);
         if (response[0] === 200) {
+          await AsyncStorage.setItem(
+            'loginCredential',
+            JSON.stringify({email, password}),
+          );
           const decoded: any = await jwtDecode(response[1].accessToken);
           setUserDetails(decoded?.details);
           await AsyncStorage.setItem('refreshToken', response[1].refreshToken);
@@ -70,6 +90,7 @@ const Login = () => {
           placeholderTextColor="#c2c2c2"
           autoCapitalize="none"
           onChangeText={text => setEmail(text)}
+          value={email}
         />
       </View>
       <View style={styles.inputView}>
@@ -79,6 +100,7 @@ const Login = () => {
           placeholderTextColor="#c2c2c2"
           onChangeText={text => setPassword(text)}
           secureTextEntry={!showPass}
+          value={password}
         />
         <TouchableOpacity
           style={{position: 'absolute', right: 10}}
@@ -92,7 +114,7 @@ const Login = () => {
       <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
         <Text style={{color: '#fff'}}>LOGIN</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
         <Text style={{color: '#000'}}>New User ? Signup</Text>
       </TouchableOpacity>
     </View>

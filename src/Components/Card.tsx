@@ -18,7 +18,7 @@ const Card = (props: any) => {
         <View className="flex-row">
           <Tag content={projectList?.role} />
         </View>
-        <Text className="font-extralight text-[13px]">
+        <Text numberOfLines={2} className="font-extralight text-[13px]">
           {projectList?.projectDetails?.description}
         </Text>
       </View>

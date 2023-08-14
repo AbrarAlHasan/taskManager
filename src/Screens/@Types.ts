@@ -49,3 +49,16 @@ export interface IProjectMembers {
   role: string;
   name: string;
 }
+export interface IProjectDetailedDetails {
+  __v: number;
+  _id: string;
+  completedTasks: number;
+  createdAt: string;
+  createdBy: string;
+  description: string;
+  name: string;
+  totalMembers: number;
+  totalTasks: number;
+  updatedAt: string;
+  pendingTasks: string;
+}
