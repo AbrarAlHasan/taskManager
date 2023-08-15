@@ -16,10 +16,10 @@ const MainStack = () => {
   const Stack = createStackNavigator<MainStackParamList>();
   return (
     <Stack.Navigator
-      initialRouteName="StartUp"
+      initialRouteName="Dashboard"
       screenOptions={{headerShown: false}}>
-      <Stack.Screen component={StartUp} name="StartUp" />
-      <Stack.Screen component={AuthStack} name="AuthStack" />
+      {/* <Stack.Screen component={StartUp} name="StartUp" /> */}
+      {/* <Stack.Screen component={AuthStack} name="AuthStack" /> */}
       <Stack.Screen component={BottomTabBar} name="BottomBar" />
       <Stack.Screen component={Dashboard} name="Dashboard" />
       <Stack.Screen component={TaskDetails} name="TaskDetails" />

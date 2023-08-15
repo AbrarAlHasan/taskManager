@@ -10,9 +10,9 @@ const Router = () => {
   const {isAuthenticated} = useContext(AuthContext);
   return (
     <NavigationContainer>
-      {/* {isAuthenticated ? <Dashboard /> : <AuthStack />} */}
+      {isAuthenticated ? <Dashboard /> : <AuthStack />}
       {/* <AuthStack /> */}
-      <MainStack />
+      {/* <MainStack /> */}
     </NavigationContainer>
   );
 };
