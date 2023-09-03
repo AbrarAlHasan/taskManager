@@ -7,54 +7,95 @@ import {getMyTasks} from '../axios/Tasks/tasks';
 import {AuthContext} from '../Context/AuthContext/AuthContext';
 import {ITaskDetails} from './@Types';
 import Tag from '../Components/Tag';
+import Loading from '../Components/Loading';
 
 const TaskList = () => {
   const {userDetails} = useContext(AuthContext);
   const [taskList, setTaskList] = useState<ITaskDetails[]>();
   const [selected, setSelected] = useState('pending');
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     userDetails &&
       (async () => {
-        const response = await getMyTasks(userDetails?._id, selected);
-        if (response[0] === 200) {
-          setTaskList(response[1]);
+        try {
+          const response = await getMyTasks(userDetails?._id, selected);
+          if (response[0] === 200) {
+            setIsLoading(false);
+            setTaskList(response[1]);
+          }
+        } catch (err) {
+          console.log(err);
         }
       })();
   }, [selected]);
   return (
-    <SafeAreaView className="px-3 bg-gray-100 flex-1">
-      <View className="w-full items-center justify-center flex-row relative mb-3">
-        <Text className="text-lg font-bold">My Tasks</Text>
-      </View>
-      <View className="flex-row mb-5">
-        <TouchableOpacity onPress={() => setSelected('pending')}>
-          <Tag
+    <>
+      <Loading show={isLoading} />
+      <SafeAreaView className="px-3 bg-gray-100 flex-1">
+        <View className="w-full items-center justify-center flex-row relative mb-3">
+          <Text className="text-lg font-bold">My Tasks</Text>
+        </View>
+        <View className="flex-row mb-5 ">
+          <TouchableOpacity
+            className="mr-3"
+            onPress={() => setSelected('pending')}>
+            {/* <Tag
             content={'pending'}
             color={selected === 'pending' ? '#2e08d4' : undefined}
             disabled={selected === 'pending' ? false : true}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setSelected('completed')}>
-          <Tag
+          /> */}
+            <View
+              style={{
+                borderColor: selected === 'pending' ? '#2e08d4' : undefined,
+                borderBottomWidth: selected === 'pending' ? 1 : 0,
+              }}
+              className="px-4 py-2 ">
+              <Text className="text-lg">Pending</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="mr-3"
+            onPress={() => setSelected('completed')}>
+            {/* <Tag
             content={'completed'}
             color={selected === 'completed' ? '#2e08d4' : undefined}
             disabled={selected === 'completed' ? false : true}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setSelected('breached')}>
-          <Tag
+          /> */}
+            <View
+              style={{
+                borderColor: selected === 'completed' ? '#2e08d4' : undefined,
+                borderBottomWidth: selected === 'completed' ? 1 : 0,
+              }}
+              className="px-4 py-2  ">
+              <Text className="text-lg">Completed</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="mr-3"
+            onPress={() => setSelected('breached')}>
+            {/* <Tag
             content={'breached'}
             color={selected === 'breached' ? '#2e08d4' : undefined}
             disabled={selected === 'breached' ? false : true}
-          />
-        </TouchableOpacity>
-      </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {taskList?.map(data => {
-          return <TaskCard key={data?._id} data={data} />;
-        })}
-      </ScrollView>
-    </SafeAreaView>
+          /> */}
+            <View
+              style={{
+                borderColor: selected === 'breached' ? '#2e08d4' : undefined,
+                borderBottomWidth: selected === 'breached' ? 1 : 0,
+              }}
+              className="px-4 py-2 ">
+              <Text className="text-lg">Breached</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {taskList?.map(data => {
+            return <TaskCard key={data?._id} data={data} />;
+          })}
+        </ScrollView>
+      </SafeAreaView>
+    </>
   );
 };
 

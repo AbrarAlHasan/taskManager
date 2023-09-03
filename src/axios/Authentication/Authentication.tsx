@@ -26,7 +26,7 @@ export const loginUser = async (credentials: any): Promise<ResponseType> => {
     const data = await LoginAPI.post('/login', credentials);
     return [data.status, data.data];
   } catch (err: any) {
-    console.log(err);
+    console.log('Error', err);
     if (
       (err.response && err.response.status === 401) ||
       err.response.status === 402

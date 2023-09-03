@@ -1,9 +1,15 @@
 import {ResponseType} from '../@types';
 import axios from '../axios';
 
-export const getTasks = async (projectId: string): Promise<ResponseType> => {
+export const getTasks = async (
+  projectId: string,
+  selected: string,
+): Promise<ResponseType> => {
   try {
-    const data = await axios.get(`task/${projectId}`);
+    const url = selected
+      ? `task/${projectId}?status=${selected}`
+      : `task/${projectId}`;
+    const data = await axios.get(url);
     return [data.status, data.data];
   } catch (err) {
     return err;

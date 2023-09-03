@@ -4,17 +4,19 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {AuthContext} from '../Context/AuthContext/AuthContext';
 import Tag from '../Components/Tag';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 
 const Profile = () => {
   const {userDetails, setUserDetails, setIsAuthenticated} =
     useContext(AuthContext);
-  console.log(userDetails);
+  const navigation = useNavigation<any>();
 
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('refreshToken');
       setUserDetails(null);
       setIsAuthenticated(false);
+      navigation.navigate('Login');
     } catch (err) {
       console.log(err);
     }

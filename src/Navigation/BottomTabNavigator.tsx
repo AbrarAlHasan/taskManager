@@ -15,14 +15,16 @@ export default function BottomTabBar({navigation, route}: any) {
     <Tab.Navigator
       initialRouteName="Dashboard"
       screenOptions={{headerShown: false}}
-      // tabBar={props => <BottomBarStyle {...props} />}
-    >
+      tabBar={props => <BottomBarStyle {...props} />}>
       {bottomTabRoutes?.map((data, idx) => {
         return (
           <Tab.Screen
             key={idx}
             name={data?.routeName}
             component={data?.component}
+            options={{
+              tabBarStyle: {display: 'none'},
+            }}
           />
         );
       })}

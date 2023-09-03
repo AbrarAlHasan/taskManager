@@ -17,7 +17,7 @@ const ResetPass = () => {
   const [showRePass, setShowRePass] = useState(false);
   const [otp, setOtp] = useState('');
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   const validate = () => {
     if (!otp) {
@@ -57,7 +57,6 @@ const ResetPass = () => {
           style={styles.inputText}
           placeholder="OTP"
           placeholderTextColor="#c2c2c2"
-          color="#fff"
           onChangeText={text => setOtp(text)}
         />
       </View>
@@ -66,7 +65,6 @@ const ResetPass = () => {
           style={styles.inputText}
           placeholder="Password"
           placeholderTextColor="#c2c2c2"
-          color="#fff"
           onChangeText={text => setPassword(text)}
           secureTextEntry={!showPass}
         />
@@ -82,7 +80,6 @@ const ResetPass = () => {
           style={styles.inputText}
           placeholder="Re Enter Password"
           placeholderTextColor="#c2c2c2"
-          color="#fff"
           onChangeText={text => setRePass(text)}
           secureTextEntry={!showRePass}
         />

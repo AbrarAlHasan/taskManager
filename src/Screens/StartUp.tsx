@@ -3,17 +3,18 @@ import React, {useContext, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../Context/AuthContext/AuthContext';
 import {useNavigation, CommonActions} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {AuthStackParamList, MainStackParamList} from '../Navigation/types';
 
 const StartUp = () => {
   const {isAuthenticated} = useContext(AuthContext);
-  const navigation = useNavigation();
+  console.log(isAuthenticated);
+  const navigation = useNavigation<any>();
   useEffect(() => {
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0, // The index of the new screen you want to navigate to
-        routes: [{name: 'Dashboard'}], // The name of the new screen component
-      }),
-    );
+    navigation.removeListener;
+    isAuthenticated
+      ? navigation.navigate('Dashboard')
+      : navigation.navigate('Login');
   }, [isAuthenticated]);
   return (
     <View className="items-center justify-center flex-1">

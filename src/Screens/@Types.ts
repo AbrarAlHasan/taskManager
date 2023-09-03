@@ -62,3 +62,7 @@ export interface IProjectDetailedDetails {
   updatedAt: string;
   pendingTasks: string;
 }
+
+export interface IProjectMembersList extends IProjectMembers {
+  userId: IUserDetails;
+}

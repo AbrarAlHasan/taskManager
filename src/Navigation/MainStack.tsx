@@ -11,12 +11,15 @@ import AddProject from '../Screens/AddProject';
 import BottomTabBar from './BottomTabNavigator';
 import StartUp from '../Screens/StartUp';
 import AuthStack from './AuthStack';
+import ProjectTasks from '../Screens/ProjectTasks';
+import MembersList from '../Screens/MembersList';
+import AddMember from '../Screens/AddMember';
 
 const MainStack = () => {
   const Stack = createStackNavigator<MainStackParamList>();
   return (
     <Stack.Navigator
-      initialRouteName="Dashboard"
+      initialRouteName="BottomBar"
       screenOptions={{headerShown: false}}>
       {/* <Stack.Screen component={StartUp} name="StartUp" /> */}
       {/* <Stack.Screen component={AuthStack} name="AuthStack" /> */}
@@ -26,6 +29,9 @@ const MainStack = () => {
       <Stack.Screen component={ProjectDetails} name="ProjectDetails" />
       <Stack.Screen component={AddTask} name="AddTaskN" />
       <Stack.Screen component={AddProject} name="AddProject" />
+      <Stack.Screen component={ProjectTasks} name="ProjectTasks" />
+      <Stack.Screen component={MembersList} name="MembersList" />
+      <Stack.Screen component={AddMember} name="AddMember" />
     </Stack.Navigator>
   );
 };

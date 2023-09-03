@@ -17,12 +17,14 @@ const SearchModal = ({
   children,
   onChange,
   text,
+  enableSearch = true,
 }: {
   open: boolean;
   onClose: () => void;
   children: ReactNode;
   onChange?: (text: string) => void;
   text?: string;
+  enableSearch?: boolean;
 }) => {
   const screenWidth = Dimensions.get('window').width;
   const screenHeight = Dimensions.get('window').height;
@@ -44,13 +46,14 @@ const SearchModal = ({
                   <CloseIcon />
                 </Pressable>
               </View>
-
-              <TextInput
-                onChangeText={e => onChange && onChange(e)}
-                value={text}
-                placeholder="Search ..."
-                className=" bg-[#e8e4e4] h-10 rounded-md px-3 mb-3"
-              />
+              {enableSearch && (
+                <TextInput
+                  onChangeText={e => onChange && onChange(e)}
+                  value={text}
+                  placeholder="Search ..."
+                  className=" bg-[#e8e4e4] h-10 rounded-md px-3 mb-3"
+                />
+              )}
               <ScrollView>{children}</ScrollView>
             </View>
           </View>

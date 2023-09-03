@@ -40,7 +40,6 @@ const OTP = ({navigation, route}: OtpProps) => {
         const response = await otpVerify(Number(otp));
         if (response[0] === 200) {
           ToastMessage('OTP Verified');
-          console.log(response);
           if (pageType === 'signUp' || pageType === 'login') {
             navigation.navigate('Login');
           }

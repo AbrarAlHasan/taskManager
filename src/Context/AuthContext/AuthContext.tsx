@@ -16,6 +16,7 @@ export const AuthContext = createContext<AuthContextType>(
 export const AuthProvider = ({children}: AuthProviderType) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchUser();
@@ -46,6 +47,8 @@ export const AuthProvider = ({children}: AuthProviderType) => {
     setIsAuthenticated,
     setUserDetails,
     userDetails,
+    isLoading,
+    setIsLoading,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

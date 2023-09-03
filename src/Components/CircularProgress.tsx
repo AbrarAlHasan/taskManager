@@ -34,7 +34,7 @@ const CircularProgress = ({...props}) => {
         strokeDashoffset={strokeDashoffset}
         strokeLinecap="round"
       />
-      <G transform={`translate(${x},${x})`}>
+      <G transform={`translate(${x},${labelName ? x : x * 1.1})`}>
         <Text
           textAnchor="middle" // Center the text horizontally
           fontSize={r * 0.4} // Set the font size as a proportion of the radius
@@ -46,8 +46,7 @@ const CircularProgress = ({...props}) => {
       <G transform={`translate(${x},${x * 1.3})`}>
         <Text
           textAnchor="middle" // Center the text horizontally
-          fontSize={r * 0.3} // Set the font size as a proportion of the radius
-          fontWeight="light"
+          fontSize={r * 0.4} // Set the font size as a proportion of the radius
           fill="#000">
           {labelName}
         </Text>

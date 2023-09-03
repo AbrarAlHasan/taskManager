@@ -7,6 +7,7 @@ import ForgotPass from '../Screens/ForgotPass';
 import ResetPass from '../Screens/ResetPass';
 import Otp from '../Screens/Otp';
 import {AuthStackParamList} from './types';
+import StartUp from '../Screens/StartUp';
 
 const AuthStack = () => {
   const Stack = createStackNavigator<AuthStackParamList>();
@@ -14,6 +15,7 @@ const AuthStack = () => {
     <Stack.Navigator
       initialRouteName="Login"
       screenOptions={{headerShown: false}}>
+      <Stack.Screen name="StartUp" component={StartUp} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="ForgotPass" component={ForgotPass} />

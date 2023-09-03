@@ -1,3 +1,4 @@
+import {Dispatch, SetStateAction} from 'react';
 import {IUserDetails} from '../../Screens/@Types';
 
 export interface AuthContextType {
@@ -5,6 +6,8 @@ export interface AuthContextType {
   isAuthenticated: any;
   setIsAuthenticated: any;
   setUserDetails: any;
+  isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface AuthProviderType {

@@ -27,6 +27,7 @@ import {addTasks, getMembers, getProjects} from '../axios/Tasks/tasks';
 import {AuthContext} from '../Context/AuthContext/AuthContext';
 import {IProjectDetails, IProjectMembers} from './@Types';
 import GoBackIcon from '../Assets/GoBack.svg';
+import {ToastMessage} from '../Utils/ToastNotification';
 
 type NavigationProps = NativeStackNavigationProp<MainStackParamList>;
 
@@ -154,6 +155,10 @@ const AddTask = () => {
       };
       const response = await addTasks(payload);
       console.log(response);
+      if (response[0] === 200) {
+        navigation.goBack();
+        ToastMessage('Task Created Successfully');
+      }
     } catch (err) {
       console.log(err);
     }

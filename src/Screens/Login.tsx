@@ -53,7 +53,6 @@ const Login = () => {
     try {
       if (validate()) {
         const response: any = await loginUser({email, password});
-        console.log(response);
         if (response[0] === 200) {
           await AsyncStorage.setItem(
             'loginCredential',
