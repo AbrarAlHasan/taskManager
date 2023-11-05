@@ -28,6 +28,7 @@ import {AuthContext} from '../Context/AuthContext/AuthContext';
 import {IProjectDetails, IProjectMembers} from './@Types';
 import GoBackIcon from '../Assets/GoBack.svg';
 import {ToastMessage} from '../Utils/ToastNotification';
+import {getMemberId} from '../axios/ProjectMembers/ProjectMembers';
 
 type NavigationProps = NativeStackNavigationProp<MainStackParamList>;
 
@@ -49,7 +50,8 @@ interface IDateDetails {
 
 const AddTask = () => {
   const navigation = useNavigation<NavigationProps>();
-  const {userDetails} = useContext(AuthContext);
+  const {userDetails, setMemberDetails, memberDetails} =
+    useContext(AuthContext);
   const [dateDetails, setDateDetails] = useState<IDateDetails>({
     field: '',
     open: false,
@@ -105,6 +107,24 @@ const AddTask = () => {
     };
   }, [projectSearch]);
 
+  const getMemberDetails = async () => {
+    try {
+      const response = await getMemberId(
+        selectedProject?._id,
+        userDetails?._id,
+      );
+      if (response[0] === 200) {
+        setMemberDetails(response[1]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    selectedProject?._id && getMemberDetails();
+  }, [selectedProject]);
+
   const fetchMembers = async () => {
     const response = await getMembers(selectedProject?._id, memberSearch);
     if (response[0] === 200) {
@@ -152,12 +172,15 @@ const AddTask = () => {
         assignedTo: selectedMembers?._id,
         priority: taskDetails?.priority,
         progress: 0,
+        memberId:memberDetails?._id
       };
       const response = await addTasks(payload);
       console.log(response);
       if (response[0] === 200) {
         navigation.goBack();
         ToastMessage('Task Created Successfully');
+      } else if (response[0] === 400) {
+        ToastMessage(response[1]);
       }
     } catch (err) {
       console.log(err);

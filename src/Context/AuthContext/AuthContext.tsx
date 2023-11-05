@@ -17,6 +17,7 @@ export const AuthProvider = ({children}: AuthProviderType) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [memberDetails,setMemberDetails] = useState("")
 
   useEffect(() => {
     fetchUser();
@@ -49,6 +50,8 @@ export const AuthProvider = ({children}: AuthProviderType) => {
     userDetails,
     isLoading,
     setIsLoading,
+    memberDetails,
+    setMemberDetails
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

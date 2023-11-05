@@ -1,15 +1,18 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 // import Router from './src/Navigation/Router';
 import {AuthContext, AuthProvider} from './src/Context/AuthContext/AuthContext';
-import ProjectDetails from './src/Screens/ProjectDetails';
-import AddTask from './src/Screens/AddTask';
-import {NavigationContainer} from '@react-navigation/native';
 import Router from './src/Navigation/Router';
 
-import {Text, View} from 'react-native';
+import {Alert} from 'react-native';
+import messaging from '@react-native-firebase/messaging';
+import {requestUserPermission} from './src/Utils/NotificationServices';
 
 const App = () => {
+  useEffect(() => {
+    requestUserPermission();
+  }, []);
+
   return (
     <AuthProvider>
       <SafeAreaProvider>

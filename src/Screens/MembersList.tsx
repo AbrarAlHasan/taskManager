@@ -1,5 +1,5 @@
 import {View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Loading from '../Components/Loading';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainStackParamList} from '../Navigation/types';
@@ -7,6 +7,8 @@ import GoBackIcon from '../Assets/GoBack.svg';
 import {getProjectMembers} from '../axios/ProjectMembers/ProjectMembers';
 import Tag from '../Components/Tag';
 import {IProjectMembersList} from './@Types';
+import { AuthContext } from '../Context/AuthContext/AuthContext';
+import { ToastMessage } from '../Utils/ToastNotification';
 
 type ProjectDetailsScreenNavigationProp = StackNavigationProp<
   MainStackParamList,
@@ -21,18 +23,25 @@ type ProjectDetailsProps = {
 const MembersList = ({navigation, route}: ProjectDetailsProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [projectMembers, setProjectMembers] = useState<any>(null);
+  const {memberDetails} = useContext(AuthContext)
 
   useEffect(() => {
     route &&
       (async () => {
         try {
-          const response = await getProjectMembers(route.params.projectId);
+          const response = await getProjectMembers(route.params.projectId,memberDetails?._id);
           if (response[0] === 200) {
             setIsLoading(false);
             setProjectMembers(response[1]);
           }
+          if(response[0]==400){
+            setIsLoading(false);
+            ToastMessage(response[1])
+            navigation?.goBack()
+          }
         } catch (err) {
-          console.log(err);
+          setIsLoading(false);
+          console.log("Error Logged",err);
         }
       })();
   }, []);

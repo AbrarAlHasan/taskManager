@@ -18,6 +18,13 @@ import {getProjectDetails} from '../axios/Projects/Projects';
 import Loading from '../Components/Loading';
 import {AuthContext} from '../Context/AuthContext/AuthContext';
 import {useIsFocused} from '@react-navigation/native';
+import {getAccessControlDetails} from '../axios/AccessControl/AccessControl';
+import {checkForAccess} from '../Utils/CheckForAccess';
+import {Config} from '../Utils/Config';
+import {
+  ToastMessage,
+  accessDeniedToastMessage,
+} from '../Utils/ToastNotification';
 
 type ProjectDetailsScreenNavigationProp = StackNavigationProp<
   MainStackParamList,
@@ -35,16 +42,58 @@ const ProjectDetails = ({navigation, route}: ProjectDetailsProps) => {
   const isFocused = useIsFocused();
 
   const [isLoading, setIsLoading] = useState(true);
+  const {userDetails, setMemberDetails, memberDetails} =
+    useContext(AuthContext);
+  // console.log(userDetails);
+
+  const navigateToAddMembers = async () => {
+    const response = await getAccessControlDetails(memberDetails);
+    if (response[0] === 200) {
+      const checkAccess = checkForAccess(response[1], Config.memberModuleId);
+
+      if (checkAccess.writeAccess) {
+        projectDetails &&
+          navigation?.navigate('AddMember', {
+            projectId: projectDetails?._id,
+            projectName: projectDetails?.name,
+          });
+      } else {
+        accessDeniedToastMessage();
+      }
+    }
+  };
+
+  const navigateToAddMember = async () => {
+    const response = await getAccessControlDetails(memberDetails);
+    if (response[0] === 200) {
+      const checkAccess = checkForAccess(response[1], Config.memberModuleId);
+      if (checkAccess.readAccess) {
+        projectDetails &&
+          navigation?.navigate('MembersList', {
+            projectId: projectDetails?._id,
+            projectName: projectDetails?.name,
+          });
+      } else {
+        accessDeniedToastMessage();
+      }
+    }
+  };
   useEffect(() => {
     route &&
       (async () => {
         try {
-          const response = await getProjectDetails(route.params.projectId);
+          const response = await getProjectDetails(
+            route.params.projectId,
+            userDetails?._id,
+          );
           if (response[0] === 200) {
+            const {memberDetails, ...projectWithoutMemberDetails} = response[1];
             setIsLoading(false);
-            setProjectDetails(response[1]);
+            setProjectDetails(projectWithoutMemberDetails);
+            setMemberDetails(memberDetails);
           }
         } catch (err) {
+          setIsLoading(false);
           console.log(err);
         }
       })();
@@ -129,26 +178,14 @@ const ProjectDetails = ({navigation, route}: ProjectDetailsProps) => {
             </View>
             <View className="flex-row justify-between gap-2 mt-3">
               <Pressable
-                onPress={() =>
-                  projectDetails &&
-                  navigation?.navigate('MembersList', {
-                    projectId: projectDetails?._id,
-                    projectName: projectDetails?.name,
-                  })
-                }
+                onPress={() => navigateToAddMember()}
                 className="bg-[#3786EB] items-center mt-5 rounded-lg py-1 flex-1">
                 <Text className="text-md px-2 text-white font-bold uppercase">
                   View All Members
                 </Text>
               </Pressable>
               <Pressable
-                onPress={() =>
-                  projectDetails &&
-                  navigation?.navigate('AddMember', {
-                    projectId: projectDetails?._id,
-                    projectName: projectDetails?.name,
-                  })
-                }
+                onPress={() => projectDetails && navigateToAddMembers()}
                 className="bg-[#3786EB] items-center mt-5 rounded-lg py-1 flex-1">
                 <Text className="text-md px-2 text-white font-bold uppercase">
                   Add Members

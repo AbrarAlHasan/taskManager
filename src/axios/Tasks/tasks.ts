@@ -71,7 +71,10 @@ export const addTasks = async (details: any): Promise<ResponseType> => {
   try {
     const data = await axios.post(`/task`, details);
     return [data.status, data.data];
-  } catch (err) {
-    return err;
+  } catch (err:any) {
+    if (err.response.status === 400) {
+      return [err.response.status, err.response.data];
+    }
+    return [err.response.status, err.response.data];
   }
 };

@@ -6,3 +6,7 @@ export const ToastMessage = (msg: string) => {
     Alert.alert(msg);
   }
 };
+
+export const accessDeniedToastMessage = () => {
+  ToastMessage('Access Denied Please Contact Owner');
+};

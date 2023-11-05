@@ -12,10 +12,11 @@ export const getProjects = async (userId: String): Promise<ResponseType> => {
 };
 
 export const getProjectDetails = async (
-  userId: String,
+  projectId: String,
+  userId:String
 ): Promise<ResponseType> => {
   try {
-    const data = await axios.get(`project/details/${userId}`);
+    const data = await axios.get(`project/details/${projectId}/${userId}`);
     return [data.status, data.data];
   } catch (err) {
     return err;

@@ -27,7 +27,11 @@ const MainStack = () => {
       <Stack.Screen component={Dashboard} name="Dashboard" />
       <Stack.Screen component={TaskDetails} name="TaskDetails" />
       <Stack.Screen component={ProjectDetails} name="ProjectDetails" />
-      <Stack.Screen component={AddTask} name="AddTaskN" />
+      <Stack.Screen
+        component={AddTask}
+        options={{presentation: 'modal'}}
+        name="AddTaskN"
+      />
       <Stack.Screen component={AddProject} name="AddProject" />
       <Stack.Screen component={ProjectTasks} name="ProjectTasks" />
       <Stack.Screen component={MembersList} name="MembersList" />

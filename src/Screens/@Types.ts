@@ -66,3 +66,23 @@ export interface IProjectDetailedDetails {
 export interface IProjectMembersList extends IProjectMembers {
   userId: IUserDetails;
 }
+
+export interface IAccessControl {
+  __v: 0;
+  _id: String;
+  createdAt: String;
+  deleteAccess: 0 | 1;
+  memberId: String;
+  moduleId: String;
+  readAccess: 0 | 1;
+  updateAccess: 0 | 1;
+  updatedAt: String;
+  writeAccess: 0 | 1;
+}
+
+export interface IAccessObject {
+  readAccess: 0 | 1;
+  updateAccess: 0 | 1;
+  writeAccess: 0 | 1;
+  deleteAccess: 0 | 1;
+}

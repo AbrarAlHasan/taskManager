@@ -8,6 +8,8 @@ export interface AuthContextType {
   setUserDetails: any;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  memberDetails:any,
+  setMemberDetails:any
 }
 
 export interface AuthProviderType {

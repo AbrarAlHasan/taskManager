@@ -6,6 +6,7 @@ import {
   TextInput,
   Pressable,
   Keyboard,
+  Switch,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -15,6 +16,7 @@ import GoBackIcon from '../Assets/GoBack.svg';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {
   addMember,
+  getMemberId,
   getVerifyMember,
 } from '../axios/ProjectMembers/ProjectMembers';
 import {ToastMessage} from '../Utils/ToastNotification';
@@ -24,6 +26,7 @@ import {AuthContext} from '../Context/AuthContext/AuthContext';
 import {getProjects} from '../axios/Tasks/tasks';
 import Tag from '../Components/Tag';
 import {resetPassword} from '../axios/Authentication/Authentication';
+import {Config} from '../Utils/Config';
 
 type MemberScreenNavigationProp = StackNavigationProp<
   MainStackParamList,
@@ -50,10 +53,14 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
   const [selectedRole, setSelectedRole] = useState({_id: '', name: ''});
 
   const [memberEmail, setMemberEmail] = useState('');
-  const [memberDetails, setMemberDetails] = useState<IUserDetails | null>(null);
-  const {userDetails} = useContext(AuthContext);
+  const [newMemberDetails, setNewMemberDetails] = useState<IUserDetails | null>(
+    null,
+  );
+  const {userDetails, memberDetails, setMemberDetails} =
+    useContext(AuthContext);
   const debounceDelay = 500;
   const [openRoleModal, setOpenRoleModal] = useState(false);
+  const [accessDetails, setAccessDetails] = useState<any>();
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -67,9 +74,28 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
     };
   }, [projectSearch]);
 
+  const getMemberDetails = async () => {
+    try {
+      console.log('ENteered');
+      const response = await getMemberId(
+        selectedProject?._id,
+        userDetails?._id,
+      );
+      if (response[0] === 200) {
+        setMemberDetails(response[1]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    selectedProject?._id && getMemberDetails();
+  }, [selectedProject]);
+
   const resetMemberInfo = () => {
     setMemberEmail('');
-    setMemberDetails(null);
+    setNewMemberDetails(null);
     setSelectedProject({_id: '', name: ''});
     setSelectedRole({_id: '', name: ''});
   };
@@ -81,13 +107,50 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
     }
   };
 
+  const onChangeAccess = (
+    idx: number,
+    key: 'readAccess' | 'writeAccess' | 'updateAccess' | 'deleteAccess',
+  ) => {
+    setAccessDetails(
+      (
+        prevData: Array<{
+          name: String;
+          _id: String;
+          readAccess: 0 | 1;
+          writeAccess: 0 | 1;
+          updateAccess: 0 | 1;
+          deleteAccess: 0 | 1;
+        }>,
+      ) => {
+        const changeRequest = prevData[idx];
+
+        const replaceValue = changeRequest[key] === 0 ? 1 : 0;
+        const newData = {...changeRequest, [key]: replaceValue};
+        return [...prevData.slice(0, idx), newData, ...prevData.slice(idx + 1)];
+      },
+    );
+  };
+
   const verifyMember = async () => {
     try {
       setIsLoading(true);
       const response = await getVerifyMember(memberEmail);
       setIsLoading(false);
       if (response[0] === 200 && response[1]) {
-        setMemberDetails(response[1]);
+        setNewMemberDetails(response[1]);
+        setAccessDetails((prevState: any) => {
+          const newAccessDetails = Config.modules?.map(data => {
+            return {
+              name: data?.name,
+              _id: data?._id,
+              readAccess: 0,
+              writeAccess: 0,
+              updateAccess: 0,
+              deleteAccess: 0,
+            };
+          });
+          return newAccessDetails;
+        });
       } else {
         ToastMessage('User Not Found');
       }
@@ -108,14 +171,20 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
     setOpenRoleModal(false);
   };
   const handleAddMember = async () => {
-    if (memberDetails) {
+    if (newMemberDetails) {
+      setIsLoading(true);
+
       try {
         const response = await addMember(
           selectedProject?._id,
-          memberDetails?._id,
+          newMemberDetails?._id,
           selectedRole?.name,
           userDetails?._id,
+          memberDetails?._id,
+          accessDetails,
         );
+        console.log(response);
+        setIsLoading(false);
         if (response[0] === 200) {
           navigation?.goBack();
           ToastMessage(response[1]);
@@ -124,6 +193,7 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
           ToastMessage(response[1]);
         }
       } catch (err: any) {
+        setIsLoading(false);
         console.log(err);
       }
     }
@@ -151,7 +221,7 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
               <GoBackIcon />
             </TouchableOpacity>
           </View>
-          {!memberDetails && (
+          {!newMemberDetails && (
             <View className="my-3 relative">
               <Text className="font-bold mb-2">Member Email</Text>
               <TextInput
@@ -161,7 +231,7 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
                 placeholder="Member Email"
                 className="w-full bg-[#e8e4e4] h-10 rounded-md px-3 "
               />
-              {memberEmail && !memberDetails && (
+              {memberEmail && !newMemberDetails && (
                 <Pressable
                   onPress={verifyMember}
                   className="absolute right-3 top-9">
@@ -170,19 +240,19 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
               )}
             </View>
           )}
-          {memberDetails && (
+          {newMemberDetails && (
             <>
               <View className="gap-2 mt-3">
                 <View className="flex-row items-center">
                   <Text className="font-bold text-md">Name : </Text>
                   <Text className="font-light text-md">
-                    {memberDetails?.name}
+                    {newMemberDetails?.name}
                   </Text>
                 </View>
                 <View className="flex-row items-center">
                   <Text className="font-bold text-md">Email : </Text>
                   <Text className="font-light text-md">
-                    {memberDetails?.email}
+                    {newMemberDetails?.email}
                   </Text>
                 </View>
               </View>
@@ -253,6 +323,57 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
                   );
                 })}
               </SearchModal>
+              <View>
+                {accessDetails?.map((data: any, idx: number) => {
+                  return (
+                    <View key={data?._id} className="mt-6">
+                      <View className="items-center">
+                        <Text className="text-lg font-bold">
+                          {data?.name + ' ' + 'Access'}
+                        </Text>
+                      </View>
+                      <View className="flex-row justify-around pt-5">
+                        <View className="items-center gap-2">
+                          <Text>Read</Text>
+                          <Switch
+                            value={data?.readAccess === 1 ? true : false}
+                            onChange={() => {
+                              onChangeAccess(idx, 'readAccess');
+                            }}
+                          />
+                        </View>
+                        <View className="items-center gap-2">
+                          <Text>Write</Text>
+                          <Switch
+                            value={data?.writeAccess === 1 ? true : false}
+                            onChange={() => {
+                              onChangeAccess(idx, 'writeAccess');
+                            }}
+                          />
+                        </View>
+                        <View className="items-center gap-2">
+                          <Text>Update</Text>
+                          <Switch
+                            value={data?.updateAccess === 1 ? true : false}
+                            onChange={() => {
+                              onChangeAccess(idx, 'updateAccess');
+                            }}
+                          />
+                        </View>
+                        <View className="items-center gap-2">
+                          <Text>Delete</Text>
+                          <Switch
+                            value={data?.deleteAccess === 1 ? true : false}
+                            onChange={() => {
+                              onChangeAccess(idx, 'deleteAccess');
+                            }}
+                          />
+                        </View>
+                      </View>
+                    </View>
+                  );
+                })}
+              </View>
             </>
           )}
         </View>
