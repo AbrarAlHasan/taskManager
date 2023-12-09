@@ -30,10 +30,15 @@ const Dashboard = () => {
   useEffect(() => {
     userDetails &&
       (async () => {
-        const response = await getProjects(userDetails?._id);
-        if (response[0] === 200) {
-          setIsLoading(false);
-          setProjectList(response[1]);
+        try {
+          const response = await getProjects(userDetails?._id);
+          console.log(response);
+          if (response[0] === 200) {
+            setIsLoading(false);
+            setProjectList(response[1]);
+          }
+        } catch (err) {
+          console.log(err);
         }
       })();
   }, [isFocused]);

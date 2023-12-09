@@ -11,9 +11,11 @@ const Profile = () => {
     useContext(AuthContext);
   const navigation = useNavigation<any>();
 
+  
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('refreshToken');
+      await AsyncStorage.removeItem('accessToken');
       setUserDetails(null);
       setIsAuthenticated(false);
       navigation.navigate('Login');
@@ -21,6 +23,7 @@ const Profile = () => {
       console.log(err);
     }
   };
+
   return (
     <SafeAreaView className="px-3 bg-gray-100 flex-1">
       <View className="w-full items-center justify-center flex-row relative mb-3">

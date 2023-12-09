@@ -19,6 +19,7 @@ export const getProjectDetails = async (
     const data = await axios.get(`project/details/${projectId}/${userId}`);
     return [data.status, data.data];
   } catch (err) {
+    
     return err;
   }
 };

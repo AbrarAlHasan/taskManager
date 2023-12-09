@@ -9,7 +9,8 @@ export interface AuthContextType {
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   memberDetails:any,
-  setMemberDetails:any
+  setMemberDetails:any,
+  handleLogout:()=>void
 }
 
 export interface AuthProviderType {

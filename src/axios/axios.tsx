@@ -1,12 +1,87 @@
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+
 //Nafil - 192.168.38.143
 //Abrar - 192.168.133.143
+const commonHeaders = {
+  'Content-Type': 'application/json',
+  // Add other headers as needed
+};
+
+// Async function to get tokens
+const getTokens = async () => {
+  try {
+    const accessToken = await AsyncStorage.getItem('accessToken');
+    const refreshToken = await AsyncStorage.getItem('refreshToken');
+
+    return {accessToken, refreshToken};
+  } catch (error) {
+    console.error('Error retrieving tokens:', error);
+    throw error;
+  }
+};
+
 const API = axios.create({
-  baseURL: 'http://192.168.38.143:8000/taskManager/',
+  baseURL: 'http://192.168.0.110:8000/taskManager/',
+  headers: commonHeaders,
 });
+
+// Interceptor to add tokens to request headers
+API.interceptors.request.use(async config => {
+  try {
+    const {accessToken, refreshToken} = await getTokens();
+
+    config.headers['Authorization'] = `Bearer ${accessToken}`;
+    config.headers['x-refresh-key'] = refreshToken;
+
+    return config;
+  } catch (error) {
+    console.error('Error adding headers:', error);
+    throw error;
+  }
+});
+
+// API.interceptors.response.use(
+//   async (response) => {
+//     console.log('REsponse Success Triggered')
+//     return response;
+//   },
+//   async (error) => {
+//     console.log('Error in the Interceptor',error)
+//     if (error.response && error.response.status === 405) {
+//       // Access Token Expired
+//       console.log('Entered the 405 Error')
+//       try {
+//         console.log("Access Token inside the Error")
+//         const newAccessToken = error.response.data.accessToken;
+
+//         // Update the tokens in AsyncStorage
+//         await AsyncStorage.setItem('accessToken', newAccessToken);
+
+//         // Retry the original request with the new access token
+//         const originalRequest = error.config;
+//         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+
+//         return axios(originalRequest);
+//       } catch (refreshError) {
+//         console.error('Error updating token:', refreshError);
+//         // Handle token update error, for example, log out the user
+//         // You may also redirect to the login page or perform other actions
+//         throw refreshError;
+//       }
+//     } else if( error.response && error.response.status === 420){
+//       await AsyncStorage.removeItem('refreshToken');
+//       await AsyncStorage.removeItem('accessToken');
+//     }
+
+//     return Promise.reject(error);
+//   }
+// );
 
 export const LoginAPI = axios.create({
-  baseURL: 'http://192.168.38.143:8000/',
+  baseURL: 'http://192.168.0.110:8000/',
 });
 
-export default API;
+
+export default API

@@ -61,6 +61,7 @@ const Login = () => {
           const decoded: any = await jwtDecode(response[1].accessToken);
           setUserDetails(decoded?.details);
           await AsyncStorage.setItem('refreshToken', response[1].refreshToken);
+          await AsyncStorage.setItem('accessToken', response[1].accessToken);
           setIsAuthenticated(true);
         }
         if (response[0] === 401) {
