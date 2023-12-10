@@ -6,11 +6,12 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {ToastMessage} from '../Utils/ToastNotification';
 import {useNavigation} from '@react-navigation/native';
 import {createUser} from '../axios/Authentication/Authentication';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../Navigation/types';
+import {useDispatch} from 'react-redux';
+import {showToastMessage} from '../Store/ToastSlice';
 type NavigationProps = NativeStackNavigationProp<AuthStackParamList>;
 const Login = () => {
   const [email, setEmail] = useState('abraralhasan111@gmail.com');
@@ -19,25 +20,49 @@ const Login = () => {
   const [rePass, setRePass] = useState('abrar');
   const [showRePass, setShowRePass] = useState(false);
   const [name, setName] = useState('Abrar Al Hasan');
-
+  const dispatch = useDispatch();
   const navigation = useNavigation<NavigationProps>();
 
   const validate = () => {
     if (!name) {
-      ToastMessage('Please Enter Name');
+      dispatch(
+        showToastMessage({
+          text: 'Please Enter Name',
+          time: 1500,
+          type: 'error',
+        }),
+      );
+
       return false;
     }
     if (!email) {
-      ToastMessage('Please Enter Email');
+      dispatch(
+        showToastMessage({
+          text: 'Please Enter Email',
+          time: 1500,
+          type: 'error',
+        }),
+      );
+
       return false;
     }
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (reg.test(email.trim()) === false) {
-      ToastMessage('Email Invalid');
+      dispatch(
+        showToastMessage({text: 'Email Invalid', time: 1500, type: 'error'}),
+      );
+
       return false;
     }
     if (rePass != password) {
-      ToastMessage('Password and Re Enter Password is not same');
+      dispatch(
+        showToastMessage({
+          text: 'Password and Re Enter Password is not same',
+          time: 1500,
+          type: 'error',
+        }),
+      );
+
       return false;
     }
     return true;
@@ -50,6 +75,13 @@ const Login = () => {
         console.log(response);
         if (response[0] === 200) {
           console.log(response[1]);
+          dispatch(
+            showToastMessage({
+              text: 'Please Verify the OTP Send over Email',
+              time: 1500,
+              type: 'success',
+            }),
+          );
           navigation.navigate('OTP', {pageType: 'signUp'});
         }
       }

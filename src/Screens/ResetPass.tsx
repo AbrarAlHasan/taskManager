@@ -6,9 +6,10 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {ToastMessage} from '../Utils/ToastNotification';
 import {useNavigation} from '@react-navigation/native';
 import {resetPassword} from '../axios/Authentication/Authentication';
+import {useDispatch} from 'react-redux';
+import {showToastMessage} from '../Store/ToastSlice';
 const ResetPass = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,20 +17,34 @@ const ResetPass = () => {
   const [rePass, setRePass] = useState('');
   const [showRePass, setShowRePass] = useState(false);
   const [otp, setOtp] = useState('');
-
+  const dispatch = useDispatch();
   const navigation = useNavigation<any>();
 
   const validate = () => {
     if (!otp) {
-      ToastMessage('Please Enter OTP');
+      dispatch(
+        showToastMessage({text: 'Please Enter OTP', time: 1500, type: 'error'}),
+      );
       return false;
     }
     if (!password) {
-      ToastMessage('Please Enter Password');
+      dispatch(
+        showToastMessage({
+          text: 'Please Enter Password',
+          time: 1500,
+          type: 'error',
+        }),
+      );
       return false;
     }
     if (rePass != password) {
-      ToastMessage('Password and Re Enter Password is not same');
+      dispatch(
+        showToastMessage({
+          text: 'Please Enter PasswordPassword and Re Enter Password is not same',
+          time: 1500,
+          type: 'error',
+        }),
+      );
       return false;
     }
     return true;
@@ -39,7 +54,13 @@ const ResetPass = () => {
     if (validate()) {
       const response = await resetPassword({otp, password});
       if (response[0] === 200) {
-        ToastMessage('Password Changed Successfully');
+        dispatch(
+          showToastMessage({
+            text: 'Password Changed Successfully',
+            time: 1500,
+            type: 'success',
+          }),
+        );
         navigation.navigate('Login');
       }
     }

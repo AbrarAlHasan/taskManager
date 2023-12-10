@@ -26,56 +26,61 @@ const TaskCard = (props: any) => {
   const navigation = useNavigation<ProjectDetailsScreenNavigationProp>();
 
   return (
-    <Pressable
-      onPress={() => {
-        navigation.navigate('TaskDetails', {taskId: taskDetails?._id});
-      }}
-      key={taskDetails?._id}
-      style={{backgroundColor: colorSelector(taskDetails?.priority)}}
-      className={`w-full rounded-lg shadow-md shadow-gray-300  flex-row justify-end mb-3 relative`}>
-      <View className="h-full w-[96%] bg-white px-5 py-3 rounded-r-lg">
-        <View className="flex-1 flex-row">
-          <View className="flex-1">
-            <View className="flex-row items-center">
-              <Text numberOfLines={1} className="font-bold text-xl mr-3">
-                {taskDetails?.name}
+    <>
+      {taskDetails && (
+        <Pressable
+          id={props.key}
+          onPress={() => {
+            navigation.navigate('TaskDetails', {taskId: taskDetails?._id});
+          }}
+          key={taskDetails?._id}
+          style={{backgroundColor: colorSelector(taskDetails?.priority)}}
+          className={`w-full rounded-lg shadow-sm shadow-gray-300  flex-row justify-end mb-3 relative`}>
+          <View className="h-full w-[96%] bg-white px-5 py-3 rounded-r-lg">
+            <View className="flex-1 flex-row">
+              <View className="flex-1">
+                <View className="flex-row items-center">
+                  <Text numberOfLines={1} className="font-bold text-xl mr-3">
+                    {taskDetails?.name}
+                  </Text>
+                </View>
+                <View className="flex-row my-1">
+                  <Tag content={taskDetails?.priority} />
+                </View>
+                <View className="flex-row items-center gap-1">
+                  <ClockIcon />
+                  <Text className="font-light text-xs">
+                    {formatDateTimeTimezone(taskDetails?.endDate)}
+                  </Text>
+                </View>
+              </View>
+              <CircularProgress
+                labelNumber={taskDetails?.progress + '%'}
+                total={100}
+                current={taskDetails?.progress}
+                size={0.8}
+              />
+            </View>
+            {taskDetails?.assignedTo?.name && (
+              <View className="flex-row-reverse items-center gap-1 mt-3 ">
+                <Tag
+                  content={taskDetails?.assignedTo?.name}
+                  classStyle="text-[12px]"
+                />
+              </View>
+            )}
+          </View>
+          {dateBreached && (
+            <View className="absolute right-0 top-0">
+              <TagShape />
+              <Text className="uppercase font-bold text-white text-[7px] top-[3px] left-2 absolute">
+                Date Breached
               </Text>
             </View>
-            <View className="flex-row my-1">
-              <Tag content={taskDetails?.priority} />
-            </View>
-            <View className="flex-row items-center gap-1">
-              <ClockIcon />
-              <Text className="font-light text-xs">
-                {formatDateTimeTimezone(taskDetails?.endDate)}
-              </Text>
-            </View>
-          </View>
-          <CircularProgress
-            labelNumber={taskDetails?.progress + '%'}
-            total={100}
-            current={taskDetails?.progress}
-            size={0.8}
-          />
-        </View>
-        {taskDetails?.assignedTo?.name && (
-          <View className="flex-row-reverse items-center gap-1 mt-3 ">
-            <Tag
-              content={taskDetails?.assignedTo?.name}
-              classStyle="text-[12px]"
-            />
-          </View>
-        )}
-      </View>
-      {dateBreached && (
-        <View className="absolute right-0 top-0">
-          <TagShape />
-          <Text className="uppercase font-bold text-white text-[7px] top-[3px] left-2 absolute">
-            Date Breached
-          </Text>
-        </View>
+          )}
+        </Pressable>
       )}
-    </Pressable>
+    </>
   );
 };
 

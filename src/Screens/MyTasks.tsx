@@ -4,11 +4,12 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import TaskCard from '../Components/TaskCard';
 import {useNavigation} from '@react-navigation/native';
 import {getMyTasks, getTasks} from '../axios/Tasks/tasks';
-import {AuthContext} from '../Context/AuthContext/AuthContext';
 import {ITaskDetails} from './@Types';
 import Tag from '../Components/Tag';
 import {MainStackParamList, TProjectDetailsParams} from '../Navigation/types';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useSelector} from 'react-redux';
+import {AuthState} from '../Store';
 
 type ProjectDetailsScreenNavigationProp = NativeStackNavigationProp<
   MainStackParamList,
@@ -21,13 +22,18 @@ type ProjectDetailsProps = {
 };
 
 const MyTasks = ({navigation, route}: ProjectDetailsProps) => {
-  const {userDetails} = useContext(AuthContext);
+  const {userDetails} = useSelector(
+    (state: AuthState) => state.authenticationReducer,
+  );
   const [taskList, setTaskList] = useState<ITaskDetails[]>();
   const [selected, setSelected] = useState('pending');
+  console.log('Hello')
+
   useEffect(() => {
     userDetails &&
       (async () => {
         const response = await getMyTasks(userDetails?._id, selected);
+        console.log('Hello')
         if (response[0] === 200) {
           setTaskList(response[1]);
         }

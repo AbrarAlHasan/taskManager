@@ -6,11 +6,12 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {ToastMessage} from '../Utils/ToastNotification';
 import {useNavigation} from '@react-navigation/native';
 import {otpVerify} from '../axios/Authentication/Authentication';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../Navigation/types';
+import {useDispatch} from 'react-redux';
+import {showToastMessage} from '../Store/ToastSlice';
 
 type OtpScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -25,10 +26,13 @@ type OtpProps = {
 const OTP = ({navigation, route}: OtpProps) => {
   const {pageType} = route.params;
   const [otp, setOtp] = useState('');
-
+  const dispatch = useDispatch();
   const validate = () => {
     if (!otp) {
-      ToastMessage('Please Enter OTP');
+      dispatch(
+        showToastMessage({text: 'Please Enter OTP', time: 1500, type: 'error'}),
+      );
+
       return false;
     }
     return true;
@@ -39,7 +43,14 @@ const OTP = ({navigation, route}: OtpProps) => {
       if (validate()) {
         const response = await otpVerify(Number(otp));
         if (response[0] === 200) {
-          ToastMessage('OTP Verified');
+          dispatch(
+            showToastMessage({
+              text: 'OTP Verified',
+              time: 1500,
+              type: 'success',
+            }),
+          );
+
           if (pageType === 'signUp' || pageType === 'login') {
             navigation.navigate('Login');
           }

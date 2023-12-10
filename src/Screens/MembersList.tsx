@@ -7,8 +7,9 @@ import GoBackIcon from '../Assets/GoBack.svg';
 import {getProjectMembers} from '../axios/ProjectMembers/ProjectMembers';
 import Tag from '../Components/Tag';
 import {IProjectMembersList} from './@Types';
-import { AuthContext } from '../Context/AuthContext/AuthContext';
-import { ToastMessage } from '../Utils/ToastNotification';
+import {useDispatch, useSelector} from 'react-redux';
+import {AuthState} from '../Store';
+import {showToastMessage} from '../Store/ToastSlice';
 
 type ProjectDetailsScreenNavigationProp = StackNavigationProp<
   MainStackParamList,
@@ -23,25 +24,38 @@ type ProjectDetailsProps = {
 const MembersList = ({navigation, route}: ProjectDetailsProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [projectMembers, setProjectMembers] = useState<any>(null);
-  const {memberDetails} = useContext(AuthContext)
+  const {memberDetails} = useSelector(
+    (state: AuthState) => state.authenticationReducer,
+  );
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     route &&
       (async () => {
         try {
-          const response = await getProjectMembers(route.params.projectId,memberDetails?._id);
+          const response = await getProjectMembers(
+            route.params.projectId,
+            memberDetails?._id,
+          );
           if (response[0] === 200) {
             setIsLoading(false);
             setProjectMembers(response[1]);
           }
-          if(response[0]==400){
+          if (response[0] == 400) {
             setIsLoading(false);
-            ToastMessage(response[1])
-            navigation?.goBack()
+            dispatch(
+              showToastMessage({
+                text: response[1],
+                time: 1500,
+                type: 'warning',
+              }),
+            );
+            navigation?.goBack();
           }
         } catch (err) {
           setIsLoading(false);
-          console.log("Error Logged",err);
+          console.log('Error Logged', err);
         }
       })();
   }, []);

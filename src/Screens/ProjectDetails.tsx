@@ -16,15 +16,14 @@ import TaskDetails from './TaskDetails';
 import GoBackIcon from '../Assets/GoBack.svg';
 import {getProjectDetails} from '../axios/Projects/Projects';
 import Loading from '../Components/Loading';
-import {AuthContext} from '../Context/AuthContext/AuthContext';
 import {useIsFocused} from '@react-navigation/native';
 import {getAccessControlDetails} from '../axios/AccessControl/AccessControl';
 import {checkForAccess} from '../Utils/CheckForAccess';
 import {Config} from '../Utils/Config';
-import {
-  ToastMessage,
-  accessDeniedToastMessage,
-} from '../Utils/ToastNotification';
+import {useDispatch, useSelector} from 'react-redux';
+import {AuthState} from '../Store';
+import {setMemberDetails} from '../Store/Authentication';
+import {showToastMessage} from '../Store/ToastSlice';
 
 type ProjectDetailsScreenNavigationProp = StackNavigationProp<
   MainStackParamList,
@@ -42,9 +41,10 @@ const ProjectDetails = ({navigation, route}: ProjectDetailsProps) => {
   const isFocused = useIsFocused();
 
   const [isLoading, setIsLoading] = useState(true);
-  const {userDetails, setMemberDetails, memberDetails} =
-    useContext(AuthContext);
-  // console.log(userDetails);
+  const {userDetails, memberDetails} = useSelector(
+    (state: AuthState) => state.authenticationReducer,
+  );
+  const dispatch = useDispatch();
 
   const navigateToAddMembers = async () => {
     const response = await getAccessControlDetails(memberDetails);
@@ -58,7 +58,13 @@ const ProjectDetails = ({navigation, route}: ProjectDetailsProps) => {
             projectName: projectDetails?.name,
           });
       } else {
-        accessDeniedToastMessage();
+        dispatch(
+          showToastMessage({
+            text: 'Access Denied Please Contact Owner',
+            time: 1500,
+            type: 'error',
+          }),
+        );
       }
     }
   };
@@ -74,7 +80,13 @@ const ProjectDetails = ({navigation, route}: ProjectDetailsProps) => {
             projectName: projectDetails?.name,
           });
       } else {
-        accessDeniedToastMessage();
+        dispatch(
+          showToastMessage({
+            text: 'Access Denied Please Contact Owner',
+            time: 1500,
+            type: 'error',
+          }),
+        );
       }
     }
   };
@@ -90,7 +102,7 @@ const ProjectDetails = ({navigation, route}: ProjectDetailsProps) => {
             const {memberDetails, ...projectWithoutMemberDetails} = response[1];
             setIsLoading(false);
             setProjectDetails(projectWithoutMemberDetails);
-            setMemberDetails(memberDetails);
+            dispatch(setMemberDetails(memberDetails));
           }
         } catch (err) {
           setIsLoading(false);

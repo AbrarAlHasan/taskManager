@@ -8,7 +8,6 @@ import {IUserDetails} from '../../Screens/@Types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ToastMessage} from '../../Utils/ToastNotification';
 import jwtDecode from 'jwt-decode';
-import { useNavigation } from '@react-navigation/native';
 
 export const AuthContext = createContext<AuthContextType>(
   {} as AuthContextType,
@@ -20,7 +19,6 @@ export const AuthProvider = ({children}: AuthProviderType) => {
   const [isLoading, setIsLoading] = useState(true);
   const [memberDetails,setMemberDetails] = useState("")
 
-  const navigation = useNavigation<any>()
 
   useEffect(() => {
     fetchUser();
@@ -49,17 +47,7 @@ export const AuthProvider = ({children}: AuthProviderType) => {
       console.log('Error', err.message);
     }
   };
-  const handleLogout = async () => {
-    try {
-      await AsyncStorage.removeItem('refreshToken');
-      await AsyncStorage.removeItem('accessToken');
-      setUserDetails(null);
-      setIsAuthenticated(false);
-      navigation.navigate('Login');
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  
 
   const value = {
     isAuthenticated,
@@ -70,7 +58,6 @@ export const AuthProvider = ({children}: AuthProviderType) => {
     setIsLoading,
     memberDetails,
     setMemberDetails,
-    handleLogout
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

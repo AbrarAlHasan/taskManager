@@ -6,11 +6,12 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {ToastMessage} from '../Utils/ToastNotification';
 import {useNavigation} from '@react-navigation/native';
 import {forgetPassword} from '../axios/Authentication/Authentication';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../Navigation/types';
+import {useDispatch} from 'react-redux';
+import {showToastMessage} from '../Store/ToastSlice';
 
 type NavigationProps = NativeStackNavigationProp<AuthStackParamList>;
 
@@ -19,16 +20,26 @@ const ForgotPass = () => {
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
 
+  const dispatch = useDispatch();
+
   const navigation = useNavigation<NavigationProps>();
 
   const validate = () => {
     if (!email) {
-      ToastMessage('Please Enter Email');
+      dispatch(
+        showToastMessage({
+          text: 'Please Enter Email',
+          time: 1500,
+          type: 'error',
+        }),
+      );
       return false;
     }
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (reg.test(email.trim()) === false) {
-      ToastMessage('Email Invalid');
+      dispatch(
+        showToastMessage({text: 'Email Invalid', time: 1500, type: 'error'}),
+      );
       return false;
     }
     return true;
@@ -40,7 +51,13 @@ const ForgotPass = () => {
       if (response[0] === 200) {
         navigation.navigate('ResetPass');
       } else {
-        ToastMessage('Please Try Again');
+        dispatch(
+          showToastMessage({
+            text: 'Please Try Again',
+            time: 1500,
+            type: 'error',
+          }),
+        );
       }
     }
     console.log(validate());

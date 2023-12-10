@@ -9,12 +9,18 @@ import Otp from '../Screens/Otp';
 import {AuthStackParamList} from './types';
 import StartUp from '../Screens/StartUp';
 
+const forFade = ({current}: any) => ({
+  cardStyle: {
+    opacity: current.progress,
+  },
+});
+
 const AuthStack = () => {
   const Stack = createStackNavigator<AuthStackParamList>();
   return (
     <Stack.Navigator
-      initialRouteName="Login"
-      screenOptions={{headerShown: false}}>
+      initialRouteName="StartUp"
+      screenOptions={{headerShown: false, cardStyleInterpolator: forFade}}>
       <Stack.Screen name="StartUp" component={StartUp} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Signup" component={Signup} />

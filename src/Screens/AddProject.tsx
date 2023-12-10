@@ -18,17 +18,22 @@ import GoBackIcon from '../Assets/GoBack.svg';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainStackParamList} from '../Navigation/types';
-import {AuthContext} from '../Context/AuthContext/AuthContext';
 import {addProject} from '../axios/Projects/Projects';
-import {ToastMessage} from '../Utils/ToastNotification';
 import Loading from '../Components/Loading';
+import {useDispatch, useSelector} from 'react-redux';
+import {AuthState} from '../Store';
+import {showToastMessage} from '../Store/ToastSlice';
 
 type NavigationProps = NativeStackNavigationProp<MainStackParamList>;
 
 const AddProject = () => {
   const navigation = useNavigation<NavigationProps>();
 
-  const {userDetails} = useContext(AuthContext);
+  const {userDetails} = useSelector(
+    (state: AuthState) => state.authenticationReducer,
+  );
+
+  const dispatch = useDispatch();
 
   const [projectDetails, setProjectDetails] = useState({
     name: '',
@@ -46,6 +51,14 @@ const AddProject = () => {
       const response = await addProject(payload);
       setIsLoading(false);
       if (response[0] === 200) {
+        dispatch(
+          showToastMessage({
+            text: 'Project Created',
+            time: 1500,
+            type: 'success',
+          }),
+        );
+
         navigation.goBack();
       }
     } catch (err) {

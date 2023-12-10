@@ -14,15 +14,19 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainStackParamList} from '../Navigation/types';
 import Card from '../Components/Card';
 import {getProjects} from '../axios/Projects/Projects';
-import {AuthContext} from '../Context/AuthContext/AuthContext';
 import {IProjectListType} from './@Types';
 import Loading from '../Components/Loading';
+import {useSelector} from 'react-redux';
+import {AuthState} from '../Store';
 type NavigationProps = NativeStackNavigationProp<MainStackParamList>;
 const Dashboard = () => {
   const navigation = useNavigation<NavigationProps>();
   const isFocused = useIsFocused();
 
-  const {userDetails} = useContext(AuthContext);
+
+  const userDetails = useSelector(
+    (state: AuthState) => state.authenticationReducer.userDetails,
+  );
 
   const [projectList, setProjectList] = useState<IProjectListType[]>();
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +36,7 @@ const Dashboard = () => {
       (async () => {
         try {
           const response = await getProjects(userDetails?._id);
-          console.log(response);
+          // console.log(response);
           if (response[0] === 200) {
             setIsLoading(false);
             setProjectList(response[1]);

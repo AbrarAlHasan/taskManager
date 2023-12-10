@@ -1,12 +1,12 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-// import Router from './src/Navigation/Router';
-import {AuthContext, AuthProvider} from './src/Context/AuthContext/AuthContext';
 import Router from './src/Navigation/Router';
 
-import {Alert} from 'react-native';
-import messaging from '@react-native-firebase/messaging';
 import {requestUserPermission} from './src/Utils/NotificationServices';
+import {Provider} from 'react-redux';
+import {store} from './src/Store';
+import ToastNotification from './src/Components/ToastNotification';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const App = () => {
   useEffect(() => {
@@ -14,11 +14,14 @@ const App = () => {
   }, []);
 
   return (
-    <AuthProvider>
+    <GestureHandlerRootView style={{flex: 1}}>
+    <Provider store={store}>
       <SafeAreaProvider>
         <Router />
+        <ToastNotification/>
       </SafeAreaProvider>
-    </AuthProvider>
+    </Provider>
+    </GestureHandlerRootView>
   );
 };
 

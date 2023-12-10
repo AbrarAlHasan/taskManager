@@ -5,9 +5,14 @@ import AddProject from '../Screens/AddProject';
 import MainStack from './MainStack';
 import AuthStack from './AuthStack';
 import Dashboard from '../Screens/Dashboard';
+import {useSelector} from 'react-redux';
+import {AuthState} from '../Store';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 const Router = () => {
-  const {isAuthenticated} = useContext(AuthContext);
+  const isAuthenticated = useSelector(
+    (state: AuthState) => state.authenticationReducer.isAuthenticated,
+  );
   return (
     <NavigationContainer>
       {isAuthenticated ? <MainStack /> : <AuthStack />}

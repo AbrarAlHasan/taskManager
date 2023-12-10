@@ -6,14 +6,15 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {ToastMessage} from '../Utils/ToastNotification';
 import {useNavigation} from '@react-navigation/native';
 import {loginUser} from '../axios/Authentication/Authentication';
 import jwtDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {AuthContext} from '../Context/AuthContext/AuthContext';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../Navigation/types';
+import {useSelector, useDispatch} from 'react-redux';
+import {setAuthenticated, setUserDetails} from '../Store/Authentication';
+import {showToastMessage} from '../Store/ToastSlice';
 type NavigationProps = NativeStackNavigationProp<AuthStackParamList>;
 
 const Login = () => {
@@ -22,7 +23,8 @@ const Login = () => {
   const [showPass, setShowPass] = useState(false);
 
   const navigation = useNavigation<NavigationProps>();
-  const {setIsAuthenticated, setUserDetails} = useContext(AuthContext);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getLoginCredentials = async () => {
@@ -38,12 +40,22 @@ const Login = () => {
 
   const validate = () => {
     if (!email) {
-      ToastMessage('Please Enter Email');
+      dispatch(
+        showToastMessage({
+          text: 'Please Enter Email',
+          time: 1500,
+          type: 'error',
+        }),
+      );
+
       return false;
     }
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (reg.test(email.trim()) === false) {
-      ToastMessage('Email Invalid');
+      dispatch(
+        showToastMessage({text: 'Email Invalid', time: 1500, type: 'error'}),
+      );
+
       return false;
     }
     return true;
@@ -54,22 +66,42 @@ const Login = () => {
       if (validate()) {
         const response: any = await loginUser({email, password});
         if (response[0] === 200) {
+          dispatch(
+            showToastMessage({
+              text: 'Login Success',
+              time: 1500,
+              type: 'success',
+            }),
+          );
           await AsyncStorage.setItem(
             'loginCredential',
             JSON.stringify({email, password}),
           );
           const decoded: any = await jwtDecode(response[1].accessToken);
-          setUserDetails(decoded?.details);
+          dispatch(setUserDetails(decoded?.details));
           await AsyncStorage.setItem('refreshToken', response[1].refreshToken);
           await AsyncStorage.setItem('accessToken', response[1].accessToken);
-          setIsAuthenticated(true);
+          dispatch(setAuthenticated(true));
         }
         if (response[0] === 401) {
-          ToastMessage('Account Not Verified. Please Verify the Account');
+          dispatch(
+            showToastMessage({
+              text: 'Account Not Verified. Please Verify the Account',
+              time: 1500,
+              type: 'error',
+            }),
+          );
+
           // navigation.navigate('OTP', {pageType: 'login'});
         }
         if (response[0] === 402) {
-          ToastMessage('Incorrect Email or Password');
+          dispatch(
+            showToastMessage({
+              text: 'Incorrect Email or Password',
+              time: 1500,
+              type: 'error',
+            }),
+          );
         }
       }
     } catch (err) {

@@ -1,23 +1,28 @@
 import {View, Text, Pressable} from 'react-native';
 import React, {useContext} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {AuthContext} from '../Context/AuthContext/AuthContext';
 import Tag from '../Components/Tag';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {AuthState} from '../Store';
+import {setAuthenticated, setUserDetails} from '../Store/Authentication';
+import {showToastMessage} from '../Store/ToastSlice';
 
 const Profile = () => {
-  const {userDetails, setUserDetails, setIsAuthenticated} =
-    useContext(AuthContext);
+  const {userDetails} = useSelector(
+    (store: AuthState) => store.authenticationReducer,
+  );
+  const dispatch = useDispatch();
   const navigation = useNavigation<any>();
 
-  
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('refreshToken');
       await AsyncStorage.removeItem('accessToken');
-      setUserDetails(null);
-      setIsAuthenticated(false);
+      dispatch(showToastMessage({text: 'Log Out Success', time: 1500,type:'success'}));
+      dispatch(setUserDetails(null));
+      dispatch(setAuthenticated(false));
       navigation.navigate('Login');
     } catch (err) {
       console.log(err);

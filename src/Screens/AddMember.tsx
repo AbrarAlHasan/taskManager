@@ -19,14 +19,16 @@ import {
   getMemberId,
   getVerifyMember,
 } from '../axios/ProjectMembers/ProjectMembers';
-import {ToastMessage} from '../Utils/ToastNotification';
 import {IProjectDetails, IUserDetails} from './@Types';
 import SearchModal from '../Components/SearchModal';
-import {AuthContext} from '../Context/AuthContext/AuthContext';
 import {getProjects} from '../axios/Tasks/tasks';
 import Tag from '../Components/Tag';
 import {resetPassword} from '../axios/Authentication/Authentication';
 import {Config} from '../Utils/Config';
+import {useDispatch, useSelector} from 'react-redux';
+import {AuthState} from '../Store';
+import {setMemberDetails} from '../Store/Authentication';
+import {showToastMessage} from '../Store/ToastSlice';
 
 type MemberScreenNavigationProp = StackNavigationProp<
   MainStackParamList,
@@ -56,8 +58,12 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
   const [newMemberDetails, setNewMemberDetails] = useState<IUserDetails | null>(
     null,
   );
-  const {userDetails, memberDetails, setMemberDetails} =
-    useContext(AuthContext);
+
+  const {userDetails, memberDetails} = useSelector(
+    (state: AuthState) => state.authenticationReducer,
+  );
+
+  const dispatch = useDispatch();
   const debounceDelay = 500;
   const [openRoleModal, setOpenRoleModal] = useState(false);
   const [accessDetails, setAccessDetails] = useState<any>();
@@ -82,7 +88,7 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
         userDetails?._id,
       );
       if (response[0] === 200) {
-        setMemberDetails(response[1]);
+        dispatch(setMemberDetails(response[1]));
       }
     } catch (err) {
       console.log(err);
@@ -152,7 +158,9 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
           return newAccessDetails;
         });
       } else {
-        ToastMessage('User Not Found');
+        dispatch(
+          showToastMessage({text: 'User Not Found', time: 1500, type: 'error'}),
+        );
       }
     } catch (err) {
       setIsLoading(false);
@@ -187,10 +195,10 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
         setIsLoading(false);
         if (response[0] === 200) {
           navigation?.goBack();
-          ToastMessage(response[1]);
+          dispatch(showToastMessage({text: response[1], time: 1500,type:'success'}));
         }
         if (response[0] === 400) {
-          ToastMessage(response[1]);
+          dispatch(showToastMessage({text: response[1], time: 1500,type:'error'}));
         }
       } catch (err: any) {
         setIsLoading(false);

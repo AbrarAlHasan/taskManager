@@ -4,13 +4,16 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import TaskCard from '../Components/TaskCard';
 import {useNavigation} from '@react-navigation/native';
 import {getMyTasks} from '../axios/Tasks/tasks';
-import {AuthContext} from '../Context/AuthContext/AuthContext';
 import {ITaskDetails} from './@Types';
 import Tag from '../Components/Tag';
 import Loading from '../Components/Loading';
+import {useSelector} from 'react-redux';
+import {AuthState} from '../Store';
 
 const TaskList = () => {
-  const {userDetails} = useContext(AuthContext);
+  const {userDetails} = useSelector(
+    (state: AuthState) => state.authenticationReducer,
+  );
   const [taskList, setTaskList] = useState<ITaskDetails[]>();
   const [selected, setSelected] = useState('pending');
   const [isLoading, setIsLoading] = useState(true);
@@ -19,6 +22,7 @@ const TaskList = () => {
     userDetails &&
       (async () => {
         try {
+          setIsLoading(true);
           const response = await getMyTasks(userDetails?._id, selected);
           if (response[0] === 200) {
             setIsLoading(false);

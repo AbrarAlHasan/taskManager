@@ -24,11 +24,13 @@ import SearchModal from '../Components/SearchModal';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {formatDateTimeTimezone} from '../Utils/FormatDateTime';
 import {addTasks, getMembers, getProjects} from '../axios/Tasks/tasks';
-import {AuthContext} from '../Context/AuthContext/AuthContext';
 import {IProjectDetails, IProjectMembers} from './@Types';
 import GoBackIcon from '../Assets/GoBack.svg';
-import {ToastMessage} from '../Utils/ToastNotification';
 import {getMemberId} from '../axios/ProjectMembers/ProjectMembers';
+import {useDispatch, useSelector} from 'react-redux';
+import {AuthState} from '../Store';
+import {setMemberDetails} from '../Store/Authentication';
+import {showToastMessage} from '../Store/ToastSlice';
 
 type NavigationProps = NativeStackNavigationProp<MainStackParamList>;
 
@@ -50,8 +52,11 @@ interface IDateDetails {
 
 const AddTask = () => {
   const navigation = useNavigation<NavigationProps>();
-  const {userDetails, setMemberDetails, memberDetails} =
-    useContext(AuthContext);
+
+  const {userDetails, memberDetails} = useSelector(
+    (state: AuthState) => state.authenticationReducer,
+  );
+  const dispatch = useDispatch();
   const [dateDetails, setDateDetails] = useState<IDateDetails>({
     field: '',
     open: false,
@@ -114,7 +119,7 @@ const AddTask = () => {
         userDetails?._id,
       );
       if (response[0] === 200) {
-        setMemberDetails(response[1]);
+        dispatch(setMemberDetails(response[1]));
       }
     } catch (err) {
       console.log(err);
@@ -172,15 +177,23 @@ const AddTask = () => {
         assignedTo: selectedMembers?._id,
         priority: taskDetails?.priority,
         progress: 0,
-        memberId:memberDetails?._id
+        memberId: memberDetails?._id,
       };
       const response = await addTasks(payload);
       console.log(response);
       if (response[0] === 200) {
         navigation.goBack();
-        ToastMessage('Task Created Successfully');
+        dispatch(
+          showToastMessage({
+            text: 'Task Created Successfully',
+            time: 1500,
+            type: 'success',
+          }),
+        );
       } else if (response[0] === 400) {
-        ToastMessage(response[1]);
+        dispatch(
+          showToastMessage({text: response[1], time: 1500, type: 'error'}),
+        );
       }
     } catch (err) {
       console.log(err);
