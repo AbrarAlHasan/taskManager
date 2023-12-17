@@ -86,3 +86,11 @@ export interface IAccessObject {
   writeAccess: 0 | 1;
   deleteAccess: 0 | 1;
 }
+
+export interface ITaskHistory {
+  _id:string,
+  taskId:string,
+  createdBy:{name:string,_id:string,email:string},
+  createdAt:Date,
+  description:string
+}

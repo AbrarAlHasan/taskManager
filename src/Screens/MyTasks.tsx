@@ -27,13 +27,11 @@ const MyTasks = ({navigation, route}: ProjectDetailsProps) => {
   );
   const [taskList, setTaskList] = useState<ITaskDetails[]>();
   const [selected, setSelected] = useState('pending');
-  console.log('Hello')
 
   useEffect(() => {
     userDetails &&
       (async () => {
         const response = await getMyTasks(userDetails?._id, selected);
-        console.log('Hello')
         if (response[0] === 200) {
           setTaskList(response[1]);
         }
@@ -69,7 +67,7 @@ const MyTasks = ({navigation, route}: ProjectDetailsProps) => {
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         {taskList?.map(data => {
-          return <TaskCard key={data?._id} data={data} />;
+          return <TaskCard id={data?._id} data={data} />;
         })}
       </ScrollView>
     </SafeAreaView>

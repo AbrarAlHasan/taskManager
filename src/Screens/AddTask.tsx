@@ -178,6 +178,7 @@ const AddTask = () => {
         priority: taskDetails?.priority,
         progress: 0,
         memberId: memberDetails?._id,
+        createdBy: userDetails?._id,
       };
       const response = await addTasks(payload);
       console.log(response);

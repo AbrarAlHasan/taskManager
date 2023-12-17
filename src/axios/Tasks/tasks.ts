@@ -71,10 +71,27 @@ export const addTasks = async (details: any): Promise<ResponseType> => {
   try {
     const data = await axios.post(`/task`, details);
     return [data.status, data.data];
-  } catch (err:any) {
+  } catch (err: any) {
     if (err.response.status === 400) {
       return [err.response.status, err.response.data];
     }
     return [err.response.status, err.response.data];
+  }
+};
+
+export const getTaskHistory = async (taskId: string): Promise<ResponseType> => {
+  try {
+    const data = await axios.get(`/task/taskHistory/${taskId}`);
+    return [data.status, data.data];
+  } catch (err: any) {
+    return err;
+  }
+};
+export const editTask = async (payload: any): Promise<ResponseType> => {
+  try {
+    const data = await axios.post(`/task/editTask`, payload);
+    return [data.status, data.data];
+  } catch (err: any) {
+    return err;
   }
 };

@@ -19,7 +19,8 @@ type ProjectDetailsScreenNavigationProp = NativeStackNavigationProp<
 const TaskCard = (props: any) => {
   const taskDetails: ITaskDetails = props?.data;
   const dateBreached =
-    new Date(taskDetails?.endDate) < new Date() && taskDetails?.progress < 100
+    new Date(taskDetails?.endDate).setHours(0, 0, 0, 0) <
+      new Date().setHours(0, 0, 0, 0) && taskDetails?.progress < 100
       ? true
       : false;
 
@@ -29,7 +30,7 @@ const TaskCard = (props: any) => {
     <>
       {taskDetails && (
         <Pressable
-          id={props.key}
+          id={props.id}
           onPress={() => {
             navigation.navigate('TaskDetails', {taskId: taskDetails?._id});
           }}
