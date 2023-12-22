@@ -182,10 +182,10 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
             <TouchableOpacity onPress={() => navigation && navigation.goBack()}>
               <GoBackIcon />
             </TouchableOpacity>
-            <Text className="flex-1 text-center font-bold text-lg">
+            <Text className="flex-1 text-center font-bold text-lg  text-black">
               {'Task Details'}
             </Text>
-            <Text className="font-bold text-lg">{'...'}</Text>
+            <Text className="font-bold text-lg  text-black">{'...'}</Text>
           </View>
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -193,7 +193,7 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
             className="gap-3">
             <View>
               <View className="flex-row justify-between items-center">
-                <Text className="text-2xl font-bold mr-2">
+                <Text className="text-2xl font-bold mr-2  text-black">
                   {taskDetails?.name}
                 </Text>
                 <Pressable
@@ -230,7 +230,9 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
                   });
                 }}
                 className="flex-1">
-                <Text className="font-light text-[12px]">Progress</Text>
+                <Text className="font-light text-[12px]  text-black">
+                  Progress
+                </Text>
                 <View className=" flex-row items-center gap-4">
                   <View className="w-40 bg-[#E6E6E6] h-2 rounded-md ">
                     <View
@@ -242,7 +244,7 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
                       }}
                       className={` h-full bg-[#18B797] rounded-md`}></View>
                   </View>
-                  <Text className="font-bold">
+                  <Text className="font-bold text-black">
                     {taskDetails?.progress + '%'}
                   </Text>
                 </View>
@@ -274,15 +276,17 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
             <View className="flex-row">
               <View className="flex-1">
                 <View className="flex-row mb-3">
-                  <Text className="w-32 font-light">Assigned to</Text>
-                  <Text className="font-semi-bold">
+                  <Text className="w-32 font-light text-black">
+                    Assigned to
+                  </Text>
+                  <Text className="font-semi-bold text-black">
                     {taskDetails?.assignedTo?.name}
                   </Text>
                 </View>
                 {/* Created At */}
                 <View className="flex-row">
-                  <Text className="w-32 font-light">Created At</Text>
-                  <Text className="font-semi-bold">
+                  <Text className="w-32 font-light text-black">Created At</Text>
+                  <Text className="font-semi-bold text-black">
                     {formatDateTimeTimezone(
                       taskDetails?.createdAt,
                       'DD-MMM-YYYY',
@@ -316,7 +320,7 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
 
             {/* Priority */}
             <View className="flex-row">
-              <Text className="w-32 font-light">Priority</Text>
+              <Text className="w-32 font-light text-black">Priority</Text>
               <Pressable
                 onPress={() => {
                   setConfirmationDetails({
@@ -336,7 +340,9 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
             {/* Description */}
             <View>
               <View className="flex-row items-center justify-between">
-                <Text className="font-bold text-lg mr-2">Description</Text>
+                <Text className="font-bold text-lg mr-2 text-black">
+                  Description
+                </Text>
                 <Pressable
                   onPress={() => {
                     setConfirmationDetails({
@@ -361,7 +367,7 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
             </View>
             {/* Task History */}
             <View>
-              <Text className="font-bold text-lg">Task History</Text>
+              <Text className="font-bold text-lg text-black">Task History</Text>
               <View className="w-full h-[1px] bg-gray-400 mb-4 mt-2"></View>
               {taskHistory?.map((data, index) => {
                 return (
@@ -371,7 +377,9 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
                     </View>
 
                     <View className="gap-1 w-[90%]">
-                      <Text className="font-bold">{data?.createdBy?.name}</Text>
+                      <Text className="font-bold text-black">
+                        {data?.createdBy?.name}
+                      </Text>
                       <Text className="font-light  text-[12px] text-gray-700">
                         {formatDateTimeTimezone(
                           data?.createdAt,

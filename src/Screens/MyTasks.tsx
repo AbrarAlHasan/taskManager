@@ -40,7 +40,7 @@ const MyTasks = ({navigation, route}: ProjectDetailsProps) => {
   return (
     <SafeAreaView className="px-3 bg-gray-100 flex-1">
       <View className="w-full items-center justify-center flex-row relative mb-3">
-        <Text className="text-lg font-bold">My Tasks</Text>
+        <Text className="text-lg font-bold  text-black">My Tasks</Text>
       </View>
       <View className="flex-row mb-5">
         <TouchableOpacity onPress={() => setSelected('pending')}>

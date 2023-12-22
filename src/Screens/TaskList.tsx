@@ -36,9 +36,9 @@ const TaskList = () => {
   return (
     <>
       <Loading show={isLoading} />
-      <SafeAreaView className="px-3 bg-gray-100 flex-1">
+      <SafeAreaView className="px-3 mt-4 bg-gray-100 flex-1">
         <View className="w-full items-center justify-center flex-row relative mb-3">
-          <Text className="text-lg font-bold">My Tasks</Text>
+          <Text className="text-lg font-bold  text-black">My Tasks</Text>
         </View>
         <View className="flex-row mb-5 ">
           <TouchableOpacity
@@ -55,7 +55,7 @@ const TaskList = () => {
                 borderBottomWidth: selected === 'pending' ? 1 : 0,
               }}
               className="px-4 py-2 ">
-              <Text className="text-lg">Pending</Text>
+              <Text className="text-lg text-black">Pending</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -72,7 +72,7 @@ const TaskList = () => {
                 borderBottomWidth: selected === 'completed' ? 1 : 0,
               }}
               className="px-4 py-2  ">
-              <Text className="text-lg">Completed</Text>
+              <Text className="text-lg text-black">Completed</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -89,7 +89,7 @@ const TaskList = () => {
                 borderBottomWidth: selected === 'breached' ? 1 : 0,
               }}
               className="px-4 py-2 ">
-              <Text className="text-lg">Breached</Text>
+              <Text className="text-lg text-black">Breached</Text>
             </View>
           </TouchableOpacity>
         </View>

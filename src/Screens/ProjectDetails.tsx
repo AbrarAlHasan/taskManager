@@ -113,9 +113,11 @@ const ProjectDetails = ({navigation, route}: ProjectDetailsProps) => {
   return (
     <>
       <Loading show={isLoading} />
-      <SafeAreaView className="px-3 mt-2 bg-white flex-1">
+      <SafeAreaView className="px-3 pt-4 bg-white flex-1">
         <View className="w-full items-center justify-center flex-row relative mb-3">
-          <Text className="text-lg font-bold">{projectDetails?.name}</Text>
+          <Text className="text-lg font-bold  text-black">
+            {projectDetails?.name}
+          </Text>
           <TouchableOpacity
             className="absolute left-0 top-0"
             onPress={() => navigation && navigation.goBack()}>
@@ -132,21 +134,21 @@ const ProjectDetails = ({navigation, route}: ProjectDetailsProps) => {
                 {projectDetails?.totalTasks}
               </Text>
               <View className="h-[1px] w-[80%] bg-gray-400"></View>
-              <Text className="font-light mt-1">Total Tasks</Text>
+              <Text className="font-light mt-1 text-black">Total Tasks</Text>
             </View>
             <View className=" flex-1 items-center justify-center">
               <Text className="text-4xl font-bold text-green-600">
                 {projectDetails?.completedTasks}
               </Text>
               <View className="h-[1px] w-[80%] bg-gray-400"></View>
-              <Text className="font-light mt-1">Completed Tasks</Text>
+              <Text className="font-light mt-1 text-black">Completed Tasks</Text>
             </View>
             <View className="flex-1 items-center justify-center">
               <Text className="text-4xl font-bold text-red-500">
                 {projectDetails?.pendingTasks}
               </Text>
               <View className="h-[1px] w-[80%] bg-gray-400"></View>
-              <Text className="font-light mt-1">Pending Tasks</Text>
+              <Text className="font-light mt-1  text-black">Pending Tasks</Text>
             </View>
           </View>
           <View className="flex-row justify-between gap-2 mt-3">
@@ -178,14 +180,18 @@ const ProjectDetails = ({navigation, route}: ProjectDetailsProps) => {
                   {projectDetails?.totalMembers}
                 </Text>
                 <View className="h-[1px] w-[80%] bg-gray-400"></View>
-                <Text className="font-light mt-1">Total Members</Text>
+                <Text className="font-light mt-1  text-black">
+                  Total Members
+                </Text>
               </View>
               <View className=" flex-1 items-center justify-center">
                 <Text className="text-4xl font-bold text-green-600">
                   {projectDetails?.completedTasks}
                 </Text>
                 <View className="h-[1px] w-[80%] bg-gray-400"></View>
-                <Text className="font-light mt-1">Pending Requests</Text>
+                <Text className="font-light mt-1  text-black">
+                  Pending Requests
+                </Text>
               </View>
             </View>
             <View className="flex-row justify-between gap-2 mt-3">

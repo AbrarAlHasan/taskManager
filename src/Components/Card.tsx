@@ -10,15 +10,15 @@ const Card = (props: any) => {
   return (
     <View
       key={projectList?._id}
-      className="w-full bg-white rounded-lg shadow-sm shadow-gray-300 px-5 py-3 flex-row justify-center mb-3">
+      className="w-full bg-white rounded-lg shadow-sm shadow-gray-300 px-5 py-3 flex-row justify-center mb-3 border-gray-300 border-[1px]">
       <View className="flex-1 gap-2">
-        <Text className="font-bold text-xl">
+        <Text className="font-bold text-xl text-black">
           {projectList?.projectDetails?.name}
         </Text>
         <View className="flex-row">
           <Tag content={projectList?.role} />
         </View>
-        <Text numberOfLines={2} className="font-extralight text-[13px]">
+        <Text numberOfLines={2} className="font-extralight text-[13px] text-black">
           {projectList?.projectDetails?.description}
         </Text>
       </View>

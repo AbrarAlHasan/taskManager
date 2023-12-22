@@ -23,7 +23,6 @@ const Dashboard = () => {
   const navigation = useNavigation<NavigationProps>();
   const isFocused = useIsFocused();
 
-
   const userDetails = useSelector(
     (state: AuthState) => state.authenticationReducer.userDetails,
   );
@@ -50,9 +49,9 @@ const Dashboard = () => {
   return (
     <>
       <Loading show={isLoading} />
-      <SafeAreaView className="px-3 bg-gray-100 flex-1">
+      <SafeAreaView className="px-3 pt-4 bg-white flex-1">
         <View className="w-full items-center justify-center flex-row relative mb-3">
-          <Text className="text-lg font-bold">Projects</Text>
+          <Text className="text-lg font-bold text-black">Projects</Text>
         </View>
         <Pressable
           onPress={() => navigation.navigate('AddProject')}

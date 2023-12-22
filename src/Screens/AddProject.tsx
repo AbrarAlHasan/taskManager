@@ -77,7 +77,9 @@ const AddProject = () => {
               className="flex-1"
               behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
               <View className="w-full items-center justify-center flex-row relative mb-3">
-                <Text className="text-lg font-bold">Add Project</Text>
+                <Text className="text-lg font-bold  text-black">
+                  Add Project
+                </Text>
                 <Pressable
                   className="absolute right-0"
                   onPress={handleCreateProject}>
@@ -95,7 +97,7 @@ const AddProject = () => {
                 className="flex-1"
                 showsVerticalScrollIndicator={false}>
                 <View className="gap-2 mb-3">
-                  <Text className="font-bold">Project Title</Text>
+                  <Text className="font-bold  text-black">Project Title</Text>
                   <TextInput
                     onChangeText={e =>
                       setProjectDetails({...projectDetails, name: e})
@@ -106,7 +108,7 @@ const AddProject = () => {
                   />
                 </View>
                 <View className="gap-2 mb-3">
-                  <Text className="font-bold">Description</Text>
+                  <Text className="font-bold  text-black">Description</Text>
                   <TextInput
                     onChangeText={e =>
                       setProjectDetails({...projectDetails, description: e})

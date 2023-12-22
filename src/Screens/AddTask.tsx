@@ -217,7 +217,7 @@ const AddTask = () => {
               }}
               key={data?._id}
               className="px-3 mt-1 my-3">
-              <Text className="font-bold">{data?.name}</Text>
+              <Text className="font-bold  text-black">{data?.name}</Text>
             </Pressable>
           );
         })}
@@ -242,7 +242,9 @@ const AddTask = () => {
               key={data?._id}
               className="px-3 mt-1">
               <View className="flex-row my-2">
-                <Text className="flex-1 font-bold">{data?.name}</Text>
+                <Text className="flex-1 font-bold  text-black">
+                  {data?.name}
+                </Text>
                 <Tag content={data?.role} color="random" />
               </View>
             </Pressable>
@@ -255,7 +257,7 @@ const AddTask = () => {
           className="flex-1"
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
           <View className="w-full items-center justify-center flex-row relative mb-3">
-            <Text className="text-lg font-bold">Add Task</Text>
+            <Text className="text-lg font-bold  text-black">Add Task</Text>
             <Pressable onPress={handlePost} className="absolute right-0">
               <Tag content="Add Task" color="random" />
             </Pressable>
@@ -269,7 +271,7 @@ const AddTask = () => {
           </View>
           <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
             <View className="gap-2 mb-3">
-              <Text className="font-bold">Task Title</Text>
+              <Text className="font-bold  text-black">Task Title</Text>
               <TextInput
                 onChangeText={e => setTaskDetails({...taskDetails, title: e})}
                 value={taskDetails?.title}
@@ -280,7 +282,7 @@ const AddTask = () => {
 
             {/* Description */}
             <View className="gap-2 mb-3">
-              <Text className="font-bold">Description</Text>
+              <Text className="font-bold  text-black">Description</Text>
               <TextInput
                 onChangeText={e =>
                   setTaskDetails({...taskDetails, description: e})
@@ -294,7 +296,7 @@ const AddTask = () => {
             {/* Date  */}
             <View className="flex-row gap-3">
               <View className="mb-3 flex-1">
-                <Text className="font-bold mb-2">Start Date</Text>
+                <Text className="font-bold mb-2  text-black">Start Date</Text>
                 <Pressable
                   onPress={() => {
                     setDateDetails({
@@ -305,7 +307,7 @@ const AddTask = () => {
                     });
                   }}>
                   <View className="w-full h-10  bg-[#e8e4e4] rounded-md px-3  justify-center">
-                    <Text>
+                    <Text className=" text-black">
                       {taskDetails?.startDate
                         ? formatDateTimeTimezone(
                             taskDetails.startDate,
@@ -317,7 +319,7 @@ const AddTask = () => {
                 </Pressable>
               </View>
               <View className="mb-3 flex-1">
-                <Text className="font-bold mb-2">End Date</Text>
+                <Text className="font-bold mb-2  text-black">End Date</Text>
                 <Pressable
                   onPress={() => {
                     setDateDetails({
@@ -330,7 +332,7 @@ const AddTask = () => {
                     });
                   }}>
                   <View className="w-full h-10  bg-[#e8e4e4] rounded-md px-3  justify-center">
-                    <Text>
+                    <Text className=" text-black">
                       {taskDetails?.endDate
                         ? formatDateTimeTimezone(
                             taskDetails.endDate,
@@ -345,7 +347,7 @@ const AddTask = () => {
 
             {/* Project */}
             <View className="gap-2 mb-3">
-              <Text className="font-bold">Project</Text>
+              <Text className="font-bold  text-black">Project</Text>
               <TextInput
                 onPressIn={() => setOpenSearchModal(true)}
                 editable={false}
@@ -358,7 +360,7 @@ const AddTask = () => {
             </View>
             {/* Assigned To */}
             <View className="gap-2 mb-3">
-              <Text className="font-bold">Assigned To</Text>
+              <Text className="font-bold  text-black">Assigned To</Text>
               <TextInput
                 editable={false}
                 onPressIn={() =>
@@ -376,7 +378,7 @@ const AddTask = () => {
             </View>
             {/* Priority */}
             <View className="gap-2 mb-3">
-              <Text className="font-bold">Priority</Text>
+              <Text className="font-bold  text-black">Priority</Text>
               <View className="flex-row ">
                 <Pressable
                   onPress={() =>

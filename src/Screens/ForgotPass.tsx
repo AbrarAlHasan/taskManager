@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     height: 64,
     marginBottom: 20,
     justifyContent: 'center',
-    padding: 20,
+    paddingHorizontal: 20,
     position: 'relative',
   },
   loginBtn: {

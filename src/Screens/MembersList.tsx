@@ -62,13 +62,13 @@ const MembersList = ({navigation, route}: ProjectDetailsProps) => {
   return (
     <>
       <Loading show={isLoading} />
-      <SafeAreaView className="px-3 bg-gray-100 flex-1">
+      <SafeAreaView className="px-3 mt-4 bg-gray-100 flex-1">
         <View className="w-full items-center justify-center flex-row relative mb-3">
           <View className="items-center">
-            <Text className="text-lg font-bold">
+            <Text className="text-lg font-bold  text-black">
               {route?.params.projectName}
             </Text>
-            <Text className="text-xs font-bold">Members</Text>
+            <Text className="text-xs font-bold  text-black">Members</Text>
           </View>
 
           <TouchableOpacity
@@ -83,7 +83,9 @@ const MembersList = ({navigation, route}: ProjectDetailsProps) => {
               return (
                 <View className="flex-row items-center mt-4" key={data?._id}>
                   <View className="w-10 h-10 bg-gray-300 rounded-full mr-3"></View>
-                  <Text className="flex-1">{data?.userId?.name}</Text>
+                  <Text className="flex-1  text-black">
+                    {data?.userId?.name}
+                  </Text>
                   <Tag content={data?.role} />
                 </View>
               );

@@ -5,7 +5,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 const Messaging = () => {
   return (
     <SafeAreaView>
-      <Text>Messaging</Text>
+      <Text className=" text-black">Messaging</Text>
     </SafeAreaView>
   );
 };

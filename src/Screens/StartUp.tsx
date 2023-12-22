@@ -19,6 +19,7 @@ import {
   setUserDetails,
 } from '../Store/Authentication';
 import {ToastMessage} from '../Utils/ToastNotification';
+import {getFcmToken} from '../Utils/NotificationServices';
 
 const StartUp = () => {
   const {isAuthenticated} = useSelector(
@@ -62,32 +63,31 @@ const StartUp = () => {
 
   useEffect(() => {
     fetchUser();
+    getFcmToken();
   }, []);
 
   useEffect(() => {
-
-    if (isAuthenticated) {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{name: 'Dashboard'}],
-        }),
-      );
-    } else {
-
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [{name: 'Login'}],
-        }),
-      );
-    }
+    // if (isAuthenticated) {
+    //   navigation.dispatch(
+    //     CommonActions.reset({
+    //       index: 0,
+    //       routes: [{name: 'Dashboard'}],
+    //     }),
+    //   );
+    // } else {
+    //   navigation.dispatch(
+    //     CommonActions.reset({
+    //       index: 1,
+    //       routes: [{name: 'Login'}],
+    //     }),
+    //   );
+    // }
   }, [isAuthenticated]);
   return (
     <View className="items-center justify-center flex-1">
-      <Text className="text-5xl">TASK MANAGER</Text>
-      <Text className="text-lg">Powered By</Text>
-      <Text className="text-sm">Abrar Al Hasan</Text>
+      <Text className="text-5xl text-black">TASK MANAGER</Text>
+      <Text className="text-lg  text-black">Powered By</Text>
+      <Text className="text-sm  text-black">Abrar Al Hasan</Text>
     </View>
   );
 };

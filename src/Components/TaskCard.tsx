@@ -23,7 +23,6 @@ const TaskCard = (props: any) => {
       new Date().setHours(0, 0, 0, 0) && taskDetails?.progress < 100
       ? true
       : false;
-
   const navigation = useNavigation<ProjectDetailsScreenNavigationProp>();
 
   return (
@@ -36,12 +35,14 @@ const TaskCard = (props: any) => {
           }}
           key={taskDetails?._id}
           style={{backgroundColor: colorSelector(taskDetails?.priority)}}
-          className={`w-full rounded-lg shadow-sm shadow-gray-300  flex-row justify-end mb-3 relative`}>
+          className={`w-full rounded-lg shadow-sm shadow-gray-300  flex-row justify-end mb-3 relative border-gray-200 border-[1px]`}>
           <View className="h-full w-[96%] bg-white px-5 py-3 rounded-r-lg">
             <View className="flex-1 flex-row">
               <View className="flex-1">
                 <View className="flex-row items-center">
-                  <Text numberOfLines={1} className="font-bold text-xl mr-3">
+                  <Text
+                    numberOfLines={1}
+                    className="font-bold text-xl mr-3  text-black">
                     {taskDetails?.name}
                   </Text>
                 </View>
@@ -50,7 +51,7 @@ const TaskCard = (props: any) => {
                 </View>
                 <View className="flex-row items-center gap-1">
                   <ClockIcon />
-                  <Text className="font-light text-xs">
+                  <Text className="font-light text-xs  text-black">
                     {formatDateTimeTimezone(taskDetails?.endDate)}
                   </Text>
                 </View>

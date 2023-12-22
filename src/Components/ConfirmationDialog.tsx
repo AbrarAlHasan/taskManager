@@ -32,7 +32,7 @@ const ConfirmationDialog = ({
   const renderDateDesign = () => {
     return (
       <>
-        <Text className="font-bold text-lg">{`Do you want to Edit the ${confirmationDetails.placeholder}`}</Text>
+        <Text className="font-bold text-lg  text-black">{`Do you want to Edit the ${confirmationDetails.placeholder}`}</Text>
         <View className="w-[100%] h-[1px] bg-gray-400 mb-4 mt-2"></View>
         <ScrollView className="w-[90%] pb-4">
           <View className="items-center ">
@@ -76,7 +76,7 @@ const ConfirmationDialog = ({
               updateTaskDetails(payload);
             }}
             className="bg-green-500 px-3 py-2 ml-4 rounded-md">
-            <Text className="font-bold">Yes</Text>
+            <Text className="font-bold  text-black">Yes</Text>
           </Pressable>
         </View>
       </>
@@ -124,7 +124,7 @@ const ConfirmationDialog = ({
   const renderTextConfirmation = () => {
     return (
       <>
-        <Text className="font-bold text-lg">{`Do you want to Edit the ${confirmationDetails.placeholder}`}</Text>
+        <Text className="font-bold text-lg  text-black">{`Do you want to Edit the ${confirmationDetails.placeholder}`}</Text>
         <View className="w-[100%] h-[1px] bg-gray-400 mb-4 mt-2"></View>
         {confirmationDetails?.type === 'TEXT' && (
           <ScrollView className="w-[90%] pb-4">
@@ -187,7 +187,7 @@ const ConfirmationDialog = ({
               });
             }}
             className="bg-green-500 px-3 py-2 ml-4 rounded-md">
-            <Text className="font-bold">Yes</Text>
+            <Text className="font-bold  text-black">Yes</Text>
           </Pressable>
         </View>
       </>
@@ -222,7 +222,7 @@ const ConfirmationDialog = ({
                     }}>
                     <Text
                       style={{top: -32, left: -5}}
-                      className="absolute font-bold h-10">
+                      className="absolute font-bold h-10  text-black">
                       {0 + '%'}
                     </Text>
                   </Pressable>
@@ -236,7 +236,7 @@ const ConfirmationDialog = ({
                   }}>
                   <Text
                     style={{top: -32, right: -20}}
-                    className="absolute font-bold h-10">
+                    className="absolute font-bold h-10  text-black">
                     {data + '%'}
                   </Text>
                 </Pressable>

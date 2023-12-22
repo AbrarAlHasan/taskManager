@@ -195,10 +195,14 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
         setIsLoading(false);
         if (response[0] === 200) {
           navigation?.goBack();
-          dispatch(showToastMessage({text: response[1], time: 1500,type:'success'}));
+          dispatch(
+            showToastMessage({text: response[1], time: 1500, type: 'success'}),
+          );
         }
         if (response[0] === 400) {
-          dispatch(showToastMessage({text: response[1], time: 1500,type:'error'}));
+          dispatch(
+            showToastMessage({text: response[1], time: 1500, type: 'error'}),
+          );
         }
       } catch (err: any) {
         setIsLoading(false);
@@ -213,7 +217,7 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
       <SafeAreaView className="px-3 bg-gray-100 flex-1">
         <View className="flex-1 px-3">
           <View className="w-full items-center justify-center flex-row relative mb-3">
-            <Text className="text-lg font-bold">Add Member</Text>
+            <Text className="text-lg font-bold  text-black">Add Member</Text>
             <Pressable onPress={handleAddMember} className="absolute right-0">
               <Tag
                 disabled={!selectedProject.name || !selectedRole.name}
@@ -231,7 +235,7 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
           </View>
           {!newMemberDetails && (
             <View className="my-3 relative">
-              <Text className="font-bold mb-2">Member Email</Text>
+              <Text className="font-bold mb-2  text-black">Member Email</Text>
               <TextInput
                 onChangeText={e => setMemberEmail(e)}
                 value={memberEmail}
@@ -252,14 +256,16 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
             <>
               <View className="gap-2 mt-3">
                 <View className="flex-row items-center">
-                  <Text className="font-bold text-md">Name : </Text>
-                  <Text className="font-light text-md">
+                  <Text className="font-bold text-md  text-black">Name : </Text>
+                  <Text className="font-light text-md  text-black">
                     {newMemberDetails?.name}
                   </Text>
                 </View>
                 <View className="flex-row items-center">
-                  <Text className="font-bold text-md">Email : </Text>
-                  <Text className="font-light text-md">
+                  <Text className="font-bold text-md  text-black">
+                    Email :{' '}
+                  </Text>
+                  <Text className="font-light text-md text-black">
                     {newMemberDetails?.email}
                   </Text>
                 </View>
@@ -268,11 +274,11 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
                 <Pressable
                   onPress={() => resetMemberInfo()}
                   className="bg-red-300 px-3 py-2 rounded-lg">
-                  <Text className="font-semibold">Change User</Text>
+                  <Text className="font-semibold  text-black">Change User</Text>
                 </Pressable>
               </View>
               <View className="mt-5 mb-3">
-                <Text className="font-bold mb-2">Project</Text>
+                <Text className="font-bold mb-2  text-black">Project</Text>
                 <TextInput
                   onPressIn={() => setOpenSearchModal(true)}
                   editable={false}
@@ -284,7 +290,7 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
               </View>
 
               <View className="mt-5 mb-3">
-                <Text className="font-bold mb-2">Role</Text>
+                <Text className="font-bold mb-2  text-black">Role</Text>
                 <TextInput
                   onPressIn={() => setOpenRoleModal(true)}
                   editable={false}
@@ -308,7 +314,9 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
                       }}
                       key={data?._id}
                       className="px-3 mt-1 my-3">
-                      <Text className="font-bold">{data?.name}</Text>
+                      <Text className="font-bold  text-black">
+                        {data?.name}
+                      </Text>
                     </Pressable>
                   );
                 })}
@@ -326,7 +334,9 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
                       }}
                       key={data?._id}
                       className="px-3 mt-1 my-3">
-                      <Text className="font-bold">{data?.name}</Text>
+                      <Text className="font-bold  text-black">
+                        {data?.name}
+                      </Text>
                     </Pressable>
                   );
                 })}
@@ -336,13 +346,13 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
                   return (
                     <View key={data?._id} className="mt-6">
                       <View className="items-center">
-                        <Text className="text-lg font-bold">
+                        <Text className="text-lg font-bold  text-black">
                           {data?.name + ' ' + 'Access'}
                         </Text>
                       </View>
                       <View className="flex-row justify-around pt-5">
                         <View className="items-center gap-2">
-                          <Text>Read</Text>
+                          <Text className=" text-black">Read</Text>
                           <Switch
                             value={data?.readAccess === 1 ? true : false}
                             onChange={() => {
@@ -351,7 +361,7 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
                           />
                         </View>
                         <View className="items-center gap-2">
-                          <Text>Write</Text>
+                          <Text className=" text-black">Write</Text>
                           <Switch
                             value={data?.writeAccess === 1 ? true : false}
                             onChange={() => {
@@ -360,7 +370,7 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
                           />
                         </View>
                         <View className="items-center gap-2">
-                          <Text>Update</Text>
+                          <Text className=" text-black">Update</Text>
                           <Switch
                             value={data?.updateAccess === 1 ? true : false}
                             onChange={() => {
@@ -369,7 +379,7 @@ const AddMember = ({navigation, route}: ProjectDetailsProps) => {
                           />
                         </View>
                         <View className="items-center gap-2">
-                          <Text>Delete</Text>
+                          <Text className=" text-black">Delete</Text>
                           <Switch
                             value={data?.deleteAccess === 1 ? true : false}
                             onChange={() => {

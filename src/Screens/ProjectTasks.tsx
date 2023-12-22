@@ -49,9 +49,9 @@ const ProjectTasks = ({navigation, route}: ProjectDetailsProps) => {
         <SafeAreaView
           style={{paddingHorizontal: 12}}
           className=" bg-white flex-1">
-          <View className="px-3">
+          <View className="px-3 mt-4">
             <View className="w-full items-center justify-center flex-row relative mb-3">
-              <Text className="text-lg font-bold">
+              <Text className="text-lg font-bold  text-black">
                 {route?.params?.projectName} Tasks
               </Text>
               <TouchableOpacity
@@ -72,7 +72,7 @@ const ProjectTasks = ({navigation, route}: ProjectDetailsProps) => {
                     borderBottomWidth: selected === 'pending' ? 1 : 0,
                   }}
                   className="px-4 py-2 ">
-                  <Text className="text-lg">Pending</Text>
+                  <Text className="text-lg  text-black">Pending</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
@@ -85,7 +85,7 @@ const ProjectTasks = ({navigation, route}: ProjectDetailsProps) => {
                     borderBottomWidth: selected === 'completed' ? 1 : 0,
                   }}
                   className="px-4 py-2  ">
-                  <Text className="text-lg">Completed</Text>
+                  <Text className="text-lg  text-black">Completed</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
@@ -98,11 +98,11 @@ const ProjectTasks = ({navigation, route}: ProjectDetailsProps) => {
                     borderBottomWidth: selected === 'breached' ? 1 : 0,
                   }}
                   className="px-4 py-2 ">
-                  <Text className="text-lg">Breached</Text>
+                  <Text className="text-lg  text-black">Breached</Text>
                 </View>
               </TouchableOpacity>
             </View>
-            <ScrollView showsVerticalScrollIndicator={false} className='h-full'>
+            <ScrollView showsVerticalScrollIndicator={false} className="h-full">
               {taskList?.map(data => {
                 return <TaskCard data={data} />;
               })}

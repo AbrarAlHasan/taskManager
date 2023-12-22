@@ -15,6 +15,7 @@ import {AuthStackParamList} from '../Navigation/types';
 import {useSelector, useDispatch} from 'react-redux';
 import {setAuthenticated, setUserDetails} from '../Store/Authentication';
 import {showToastMessage} from '../Store/ToastSlice';
+import Loading from '../Components/Loading';
 type NavigationProps = NativeStackNavigationProp<AuthStackParamList>;
 
 const Login = () => {
@@ -23,6 +24,7 @@ const Login = () => {
   const [showPass, setShowPass] = useState(false);
 
   const navigation = useNavigation<NavigationProps>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -64,6 +66,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       if (validate()) {
+        setIsLoading(true);
         const response: any = await loginUser({email, password});
         if (response[0] === 200) {
           dispatch(
@@ -103,14 +106,17 @@ const Login = () => {
             }),
           );
         }
+        setIsLoading(false);
       }
     } catch (err) {
+      setIsLoading(false);
       console.log(err);
     }
   };
 
   return (
     <View style={styles.container}>
+      <Loading show={isLoading} />
       <Text style={{fontSize: 50, color: '#000'}}>Welcome</Text>
       <Text style={{fontSize: 20, color: '#000', marginBottom: 40}}>
         Please login to Continue
@@ -140,7 +146,10 @@ const Login = () => {
           <Text>{showPass ? 'Hide' : 'Show'}</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('ForgotPass');
+        }}>
         <Text style={{color: '#000'}}>Forgot Password</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
@@ -167,7 +176,7 @@ const styles = StyleSheet.create({
     height: 64,
     marginBottom: 20,
     justifyContent: 'center',
-    padding: 20,
+    paddingHorizontal: 20,
     position: 'relative',
   },
   loginBtn: {

@@ -22,7 +22,7 @@ const getTokens = async () => {
 };
 
 const API = axios.create({
-  baseURL: 'http://192.168.0.110:8000/taskManager/',
+  baseURL: 'https://personal-project-app-backend-service.onrender.com/taskManager/',
   headers: commonHeaders,
 });
 
@@ -75,7 +75,7 @@ API.interceptors.response.use(
 );
 
 export const LoginAPI = axios.create({
-  baseURL: 'http://192.168.0.110:8000/',
+  baseURL: 'https://personal-project-app-backend-service.onrender.com/',
 });
 
 export default API;
