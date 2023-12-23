@@ -51,6 +51,7 @@ const SearchModal = ({
                   onChangeText={e => onChange && onChange(e)}
                   value={text}
                   placeholder="Search ..."
+                  placeholderTextColor={'black'}
                   className=" bg-[#e8e4e4] h-10 rounded-md px-3 mb-3"
                 />
               )}

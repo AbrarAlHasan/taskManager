@@ -49,7 +49,7 @@ const Dashboard = () => {
   return (
     <>
       <Loading show={isLoading} />
-      <SafeAreaView className="px-3 pt-4 bg-white flex-1">
+      <SafeAreaView className="px-3 pt-4 flex-1">
         <View className="w-full items-center justify-center flex-row relative mb-3">
           <Text className="text-lg font-bold text-black">Projects</Text>
         </View>

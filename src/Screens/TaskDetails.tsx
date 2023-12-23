@@ -178,7 +178,7 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
       <Loading show={isLoading} />
       {taskDetails && (
         <SafeAreaView className="px-3 bg-white flex-1">
-          <View className="flex-row items-center justify-center mb-4">
+          <View className="flex-row mt-4 items-center justify-center mb-4">
             <TouchableOpacity onPress={() => navigation && navigation.goBack()}>
               <GoBackIcon />
             </TouchableOpacity>

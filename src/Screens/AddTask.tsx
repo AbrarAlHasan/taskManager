@@ -31,6 +31,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {AuthState} from '../Store';
 import {setMemberDetails} from '../Store/Authentication';
 import {showToastMessage} from '../Store/ToastSlice';
+import Loading from '../Components/Loading';
 
 type NavigationProps = NativeStackNavigationProp<MainStackParamList>;
 
@@ -84,6 +85,7 @@ const AddTask = () => {
   const [projectMembers, setProjectMembers] = useState<IProjectMembers[]>();
   const [memberSearch, setMemberSearch] = useState('');
   const [projectSearch, setProjectSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const closeSearchModal = () => {
     setOpenSearchModal(false);
   };
@@ -92,11 +94,17 @@ const AddTask = () => {
   };
 
   const fetchProjects = async () => {
-    if (userDetails) {
-      const response = await getProjects(userDetails?._id, projectSearch);
-      if (response[0] === 200) {
-        setProjects(response[1]);
+    try {
+      setIsLoading(true);
+      if (userDetails) {
+        const response = await getProjects(userDetails?._id, projectSearch);
+        setIsLoading(false);
+        if (response[0] === 200) {
+          setProjects(response[1]);
+        }
       }
+    } catch (error) {
+      setIsLoading(false);
     }
   };
 
@@ -114,14 +122,17 @@ const AddTask = () => {
 
   const getMemberDetails = async () => {
     try {
+      setIsLoading(true);
       const response = await getMemberId(
         selectedProject?._id,
         userDetails?._id,
       );
+      setIsLoading(false);
       if (response[0] === 200) {
         dispatch(setMemberDetails(response[1]));
       }
     } catch (err) {
+      setIsLoading(false);
       console.log(err);
     }
   };
@@ -131,9 +142,15 @@ const AddTask = () => {
   }, [selectedProject]);
 
   const fetchMembers = async () => {
-    const response = await getMembers(selectedProject?._id, memberSearch);
-    if (response[0] === 200) {
-      setProjectMembers(response[1]);
+    try {
+      setIsLoading(true);
+      const response = await getMembers(selectedProject?._id, memberSearch);
+      setIsLoading(false);
+      if (response[0] === 200) {
+        setProjectMembers(response[1]);
+      }
+    } catch (error) {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -167,6 +184,7 @@ const AddTask = () => {
   };
 
   const handlePost = async () => {
+    setIsLoading(true);
     try {
       const payload = {
         projectId: selectedProject?._id,
@@ -181,7 +199,7 @@ const AddTask = () => {
         createdBy: userDetails?._id,
       };
       const response = await addTasks(payload);
-      console.log(response);
+      setIsLoading(false);
       if (response[0] === 200) {
         navigation.goBack();
         dispatch(
@@ -197,12 +215,14 @@ const AddTask = () => {
         );
       }
     } catch (err) {
+      setIsLoading(false);
       console.log(err);
     }
   };
 
   return (
-    <SafeAreaView className="px-3 bg-gray-100 flex-1">
+    <SafeAreaView className="px-3 mt-4 bg-gray-100 flex-1">
+      <Loading show={isLoading} />
       <SearchModal
         open={openSearchModal}
         onClose={closeSearchModal}
@@ -275,8 +295,9 @@ const AddTask = () => {
               <TextInput
                 onChangeText={e => setTaskDetails({...taskDetails, title: e})}
                 value={taskDetails?.title}
+                placeholderTextColor={'grey'}
                 placeholder="Task Title"
-                className="w-full bg-[#e8e4e4] h-10 rounded-md px-3"
+                className="w-full bg-[#e8e4e4] h-10 rounded-md px-3 text-black"
               />
             </View>
 
@@ -289,8 +310,10 @@ const AddTask = () => {
                 }
                 value={taskDetails?.description}
                 multiline={true}
+                textAlignVertical="top"
                 placeholder="Task Title"
-                className="w-full bg-[#e8e4e4] h-32 rounded-md px-3"
+                placeholderTextColor={'grey'}
+                className="w-full bg-[#e8e4e4] h-32 rounded-md px-3 text-black"
               />
             </View>
             {/* Date  */}
@@ -307,7 +330,9 @@ const AddTask = () => {
                     });
                   }}>
                   <View className="w-full h-10  bg-[#e8e4e4] rounded-md px-3  justify-center">
-                    <Text className=" text-black">
+                    <Text
+                      style={{color: taskDetails?.startDate ? 'black' : 'grey'}}
+                      className="text-black">
                       {taskDetails?.startDate
                         ? formatDateTimeTimezone(
                             taskDetails.startDate,
@@ -332,7 +357,9 @@ const AddTask = () => {
                     });
                   }}>
                   <View className="w-full h-10  bg-[#e8e4e4] rounded-md px-3  justify-center">
-                    <Text className=" text-black">
+                    <Text
+                      style={{color: taskDetails?.endDate ? 'black' : 'grey'}}
+                      className=" text-black">
                       {taskDetails?.endDate
                         ? formatDateTimeTimezone(
                             taskDetails.endDate,
@@ -348,33 +375,51 @@ const AddTask = () => {
             {/* Project */}
             <View className="gap-2 mb-3">
               <Text className="font-bold  text-black">Project</Text>
-              <TextInput
-                onPressIn={() => setOpenSearchModal(true)}
-                editable={false}
-                onChangeText={e => setTaskDetails({...taskDetails, project: e})}
-                value={selectedProject?.name}
-                placeholder="Project"
-                className="w-full bg-[#e8e4e4] h-10 rounded-md px-3"
-              />
+              <Pressable onPress={() => setOpenSearchModal(true)}>
+                <TextInput
+                  editable={false}
+                  onChangeText={e =>
+                    setTaskDetails({...taskDetails, project: e})
+                  }
+                  value={selectedProject?.name}
+                  placeholder="Project"
+                  className="w-full bg-[#e8e4e4] h-10 rounded-md px-3 text-black"
+                  placeholderTextColor={'grey'}
+                />
+              </Pressable>
               {/* <SearchModal value={taskDetails?.project} /> */}
             </View>
             {/* Assigned To */}
             <View className="gap-2 mb-3">
-              <Text className="font-bold  text-black">Assigned To</Text>
-              <TextInput
-                editable={false}
-                onPressIn={() =>
+              <Text className="font-bold text-black">Assigned To</Text>
+              <Pressable
+                onPress={() =>
                   selectedProject?._id
                     ? setOpenMembersModal(true)
-                    : console.log('Please select Project ')
-                }
-                onChangeText={e =>
-                  setTaskDetails({...taskDetails, assignedTo: e})
-                }
-                value={selectedMembers?.name}
-                placeholder="Assigned To"
-                className="w-full bg-[#e8e4e4] h-10 rounded-md px-3"
-              />
+                    : dispatch(
+                        showToastMessage({
+                          text: 'Please Select a Project',
+                          time: 1500,
+                          type: 'error',
+                        }),
+                      )
+                }>
+                <TextInput
+                  editable={false}
+                  onPressIn={() =>
+                    selectedProject?._id
+                      ? setOpenMembersModal(true)
+                      : console.log('Please select Project ')
+                  }
+                  onChangeText={e =>
+                    setTaskDetails({...taskDetails, assignedTo: e})
+                  }
+                  value={selectedMembers?.name}
+                  placeholderTextColor={'grey'}
+                  placeholder="Assigned To"
+                  className="w-full bg-[#e8e4e4] h-10 rounded-md px-3 text-black"
+                />
+              </Pressable>
             </View>
             {/* Priority */}
             <View className="gap-2 mb-3">
