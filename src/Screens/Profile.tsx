@@ -22,6 +22,7 @@ const Profile = () => {
       await AsyncStorage.removeItem('refreshToken');
       await AsyncStorage.removeItem('accessToken');
       await AsyncStorage.removeItem('fcmToken');
+      await messaging().deleteToken()
       dispatch(
         showToastMessage({
           text: 'Log Out Success',

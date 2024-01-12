@@ -1,4 +1,9 @@
 import messaging from '@react-native-firebase/messaging';
+import {
+  useNavigation,
+  CommonActions,
+  NavigationAction,
+} from '@react-navigation/native';
 
 export const requestUserPermission = async () => {
   const authStatus = await messaging().requestPermission();
@@ -20,8 +25,9 @@ export const notificationListener = async (
   messaging().onNotificationOpenedApp((remoteMessage: any) => {
     console.log(
       'Notification caused app to open from background state:',
-      remoteMessage.notification,
+      remoteMessage,
     );
+
     // navigation.navigate(remoteMessage.data.type);
   });
 
@@ -29,13 +35,13 @@ export const notificationListener = async (
   messaging()
     .getInitialNotification()
     .then((remoteMessage: any) => {
-      if (remoteMessage) {
-        console.log(
-          'Notification caused app to open from quit state:',
-          remoteMessage.notification,
-        );
-        // setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
-      }
+      console.log('Click Triggered in Background');
+      CommonActions.reset({
+        index: 1,
+        routes: [{name: 'Dashboard'}, {name: 'Messaging'}],
+      });
+      // navigation.dispatch(CommonActions.navigate('Messaging'));
+      // setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
       //   setLoading(false);
     });
 };

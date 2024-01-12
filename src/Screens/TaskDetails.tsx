@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Pressable,
+  TextInput,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -12,7 +13,12 @@ import Tag from '../Components/Tag';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainStackParamList, TTaskDetailsParams} from '../Navigation/types';
 import {IProjectMembers, ITaskDetails, ITaskHistory} from './@Types';
-import {editTask, getTaskDetails, getTaskHistory} from '../axios/Tasks/tasks';
+import {
+  addComments,
+  editTask,
+  getTaskDetails,
+  getTaskHistory,
+} from '../axios/Tasks/tasks';
 import GoBackIcon from '../Assets/GoBack.svg';
 import {formatDateTimeTimezone} from '../Utils/FormatDateTime';
 import Loading from '../Components/Loading';
@@ -67,6 +73,9 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
   const [isRefresh, setIsRefresh] = useState(false);
   const [memberDetails, setMemberDetails] = useState<IProjectMembers>();
 
+  const [historyType, setHistoryType] = useState('ALL');
+  const [commentsText, setCommentsText] = useState('');
+
   const {userDetails} = useSelector(
     (state: AuthState) => state.authenticationReducer,
   );
@@ -96,6 +105,7 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
           const taskHistoryResponse = await getTaskHistory(
             route?.params?.taskId,
           );
+          console.log(taskHistoryResponse[1])
           if (taskHistoryResponse[0] === 200) {
             setTaskHistory(taskHistoryResponse[1]);
           }
@@ -167,6 +177,50 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
       }
       setIsRefresh(!isRefresh);
       setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
+
+  const handlePostComment = async () => {
+    try {
+      if (commentsText.trim() === '') {
+        dispatch(
+          showToastMessage({
+            text: 'Comment Should not be Empty',
+            time: 1500,
+            type: 'error',
+          }),
+        );
+      } else {
+        const payload = {
+          userId: userDetails._id,
+          comment: commentsText,
+          taskId: route?.params?.taskId,
+        };
+        const response = await addComments(payload);
+        console.log(response);
+        if (response[0] === 200) {
+          setIsLoading(true);
+
+          const taskHistoryResponse =
+            route?.params?.taskId &&
+            (await getTaskHistory(route?.params?.taskId));
+          setIsLoading(false);
+          if (taskHistoryResponse[0] === 200) {
+            setTaskHistory(taskHistoryResponse[1]);
+          }
+          setCommentsText('');
+          dispatch(
+            showToastMessage({
+              text: 'Task Updated',
+              time: 1500,
+              type: 'success',
+            }),
+          );
+        }
+      }
     } catch (error) {
       setIsLoading(false);
       console.log(error);
@@ -369,6 +423,44 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
             <View>
               <Text className="font-bold text-lg text-black">Task History</Text>
               <View className="w-full h-[1px] bg-gray-400 mb-4 mt-2"></View>
+              <View className="relative">
+                <TextInput
+                  value={commentsText}
+                  onChangeText={setCommentsText}
+                  placeholderTextColor={'grey'}
+                  placeholder="Add Comment"
+                  className="w-full bg-[#e8e4e4] h-10 rounded-md px-3 text-black"
+                />
+                <Pressable
+                  className="absolute right-4 items-center justify-center  h-full px-3"
+                  onPress={() => handlePostComment()}>
+                  <Text className="text-black font-bold">Post</Text>
+                </Pressable>
+              </View>
+              <View className="flex-row my-3">
+                <Pressable onPress={() => setHistoryType('ALL')}>
+                  <Tag
+                    content="All"
+                    classStyle="text-sm"
+                    disabled={historyType !== 'ALL'}
+                  />
+                </Pressable>
+                <Pressable onPress={() => setHistoryType('HISTORY')}>
+                  <Tag
+                    content="History"
+                    classStyle="text-sm"
+                    color="random"
+                    disabled={historyType !== 'HISTORY'}
+                  />
+                </Pressable>
+                <Pressable onPress={() => setHistoryType('COMMENTS')}>
+                  <Tag
+                    content="Comments"
+                    classStyle="text-sm"
+                    disabled={historyType !== 'COMMENTS'}
+                  />
+                </Pressable>
+              </View>
               {taskHistory?.map((data, index) => {
                 return (
                   <View key={data?._id} className="flex-row mb-5 relative">
@@ -387,7 +479,9 @@ const TaskDetails = ({navigation, route}: TaskDetailsProps) => {
                         )}
                       </Text>
                       <Text className="font-light text-[14px] text-[#646464]">
-                        {data?.description}
+                        {data?.type === 'comment'
+                          ? data?.comments
+                          : data?.description}
                       </Text>
                     </View>
                     {index !== taskHistory.length - 1 && (

@@ -63,7 +63,7 @@ const StartUp = () => {
 
   useEffect(() => {
     fetchUser();
-    getFcmToken();
+    // getFcmToken();
   }, []);
 
   useEffect(() => {

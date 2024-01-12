@@ -88,9 +88,11 @@ export interface IAccessObject {
 }
 
 export interface ITaskHistory {
+  type: string;
   _id:string,
   taskId:string,
   createdBy:{name:string,_id:string,email:string},
   createdAt:Date,
-  description:string
+  description:string,
+  comments:string
 }

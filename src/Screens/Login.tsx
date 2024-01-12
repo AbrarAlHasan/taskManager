@@ -16,6 +16,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {setAuthenticated, setUserDetails} from '../Store/Authentication';
 import {showToastMessage} from '../Store/ToastSlice';
 import Loading from '../Components/Loading';
+import { getFcmToken } from '../Utils/NotificationServices';
 type NavigationProps = NativeStackNavigationProp<AuthStackParamList>;
 
 const Login = () => {
@@ -85,6 +86,7 @@ const Login = () => {
           await AsyncStorage.setItem('refreshToken', response[1].refreshToken);
           await AsyncStorage.setItem('accessToken', response[1].accessToken);
           dispatch(setAuthenticated(true));
+          getFcmToken()
         }
         if (response[0] === 401) {
           dispatch(

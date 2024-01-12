@@ -2,8 +2,9 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {store} from '../Store/index';
 import {logoutUser} from '../Store/Authentication';
-//Nafil - 192.168.38.143
-//Abrar - 192.168.133.143
+
+const baseURL = 'https://personal-project-app-backend-service.onrender.com/';
+// const baseURL = 'http://192.168.0.110:8000/'
 const commonHeaders = {
   'Content-Type': 'application/json',
   // Add other headers as needed
@@ -22,7 +23,7 @@ const getTokens = async () => {
 };
 
 const API = axios.create({
-  baseURL: 'https://personal-project-app-backend-service.onrender.com/taskManager/',
+  baseURL: baseURL + 'taskManager/',
   headers: commonHeaders,
 });
 
@@ -75,7 +76,7 @@ API.interceptors.response.use(
 );
 
 export const LoginAPI = axios.create({
-  baseURL: 'https://personal-project-app-backend-service.onrender.com/',
+  baseURL: baseURL,
 });
 
 export default API;

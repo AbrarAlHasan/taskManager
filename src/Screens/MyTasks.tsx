@@ -42,7 +42,7 @@ const MyTasks = ({navigation, route}: ProjectDetailsProps) => {
       <View className="w-full items-center justify-center flex-row relative mb-3">
         <Text className="text-lg font-bold  text-black">My Tasks</Text>
       </View>
-      <View className="flex-row mb-5">
+      <View className="flex-row mb-5 justify-between">
         <TouchableOpacity onPress={() => setSelected('pending')}>
           <Tag
             content={'pending'}

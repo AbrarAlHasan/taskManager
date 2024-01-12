@@ -95,3 +95,11 @@ export const editTask = async (payload: any): Promise<ResponseType> => {
     return err;
   }
 };
+export const addComments = async (payload: any): Promise<ResponseType> => {
+  try {
+    const data = await axios.post(`/task/taskHistory/addComment`, payload);
+    return [data.status, data.data];
+  } catch (err: any) {
+    return err;
+  }
+};
