@@ -18,6 +18,7 @@ import {IProjectListType} from './@Types';
 import Loading from '../Components/Loading';
 import {useSelector} from 'react-redux';
 import {AuthState} from '../Store';
+import Services from './Services';
 type NavigationProps = NativeStackNavigationProp<MainStackParamList>;
 const Dashboard = () => {
   const navigation = useNavigation<NavigationProps>();
@@ -71,6 +72,7 @@ const Dashboard = () => {
               <Card data={data} />
             </TouchableOpacity>
           ))}
+          <Services />
         </ScrollView>
       </SafeAreaView>
     </>
