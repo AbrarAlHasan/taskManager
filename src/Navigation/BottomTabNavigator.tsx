@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 export default function BottomTabBar({navigation, route}: any) {
   return (
     <Tab.Navigator
-      initialRouteName="Dashboard"
+      initialRouteName="Messaging"
       screenOptions={{headerShown: false}}
       tabBar={props => <BottomBarStyle {...props} />}>
       {bottomTabRoutes?.map((data, idx) => {

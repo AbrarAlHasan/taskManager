@@ -6,7 +6,7 @@ import Geolocation from 'react-native-geolocation-service';
 
 const Services = () => {
   useEffect(() => {
-    createChannel();
+    // createChannel();
     return () => {
       console.log('Closed');
     };
@@ -111,7 +111,7 @@ const Services = () => {
     <View>
       <Pressable
         onPress={() => {
-          startForegroundService();
+          // startForegroundService();
         }}
         style={{
           backgroundColor: 'red',

@@ -15,6 +15,9 @@ import {Alert} from 'react-native';
 import PushNotification from 'react-native-push-notification';
 import {notificationListener} from './src/Utils/NotificationListener';
 import {CommonActions} from '@react-navigation/native';
+import {RealmProvider} from '@realm/react';
+import {Task} from './src/Schema/Task';
+import { Comments } from './src/Schema/Comments';
 
 const App = () => {
   useEffect(() => {
@@ -50,12 +53,14 @@ const App = () => {
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-      <Provider store={store}>
-        <SafeAreaProvider>
-          <Router />
-          <ToastNotification />
-        </SafeAreaProvider>
-      </Provider>
+      <RealmProvider schema={[Task,Comments]}>
+        <Provider store={store}>
+          <SafeAreaProvider>
+            <Router />
+            <ToastNotification />
+          </SafeAreaProvider>
+        </Provider>
+      </RealmProvider>
     </GestureHandlerRootView>
   );
 };

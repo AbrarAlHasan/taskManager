@@ -4,7 +4,6 @@ import {Alert} from 'react-native';
 import {ToastMessage} from './ToastNotification';
 import {PermissionsAndroid} from 'react-native';
 
-
 export async function requestUserPermission() {
   const authStatus = await messaging().requestPermission();
 
@@ -14,7 +13,7 @@ export async function requestUserPermission() {
 
   if (enabled) {
     console.log('Authorization status:', authStatus);
-    getFcmToken()
+    getFcmToken();
   }
 }
 
@@ -31,8 +30,8 @@ export const getFcmToken = async () => {
         await AsyncStorage.setItem('fcmToken', fcmToken);
       }
     } catch (err: any) {
-      console.log('Error in FCM Token', err);
-      ToastMessage(err.message);
+      console.log('error', err.message);
+      return err.message;
     }
   }
 };
